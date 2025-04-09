@@ -1,19 +1,35 @@
-import TripOverview from "../components/TripOverview";
+interface FeatureItem {
+  emoji: string
+  title: string
+  description: string
+}
 
 
-const Features = ({ trip }: { trip: any }) => {
+const features:FeatureItem[] = [
+  {emoji:  '✈️', title: 'Your trips', description: 'Plan and organize your personal travel journeys with ease.'},
+  { emoji: '💸', title: 'Budget and currency converter', description: 'Budgets with live currency converter' },
+  { emoji: '🏨', title: 'Places to stay', description: 'Discover and bookmark accommodations, from hotels to local stays.' },
+  { emoji: '🗺️', title: 'Places to visit', description: 'Explore must-see landmarks, hidden gems, and attractions for each destination.' },
+  { emoji: '🚗', title: 'Transport', description: 'Manage transportation options including rentals, flights, and public transit.' },
+  { emoji: '🎟️', title: 'Events', description: 'Find and save events happening at your destination — concerts, festivals, and more.' },
+  
+]
+
+const Features = () => {
   return (
-    <section className="bg-white p-8 shadow-lg rounded-lg max-w-6xl mx-auto my-8">
-      <h2 className="text-3xl font-semibold text-center text-blue-600 mb-8">
-        Explore Your Trip Features
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-          <TripOverview trip={trip} />
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-8 px-6 py-16 max-w-4xl mx-auto">
+      {features.map((feature: FeatureItem) => (
+        <div
+          key={feature.title}
+          className="bg-white shadow-md rounded-xl p-6 text-center border"
+        >
+          <div className="text-4xl mb-2">{feature.emoji}</div>
+          <h3 className="text-xl font-semibold">{feature.title}</h3>
+          <p className="text-gray-600">{feature.description}</p>
         </div>
-      </div>
+      ))}
     </section>
-  );
-};
+  )
+}
 
 export default Features;

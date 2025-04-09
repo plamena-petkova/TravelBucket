@@ -1,15 +1,27 @@
-export default function Hero() {
-    return (
-      <section className="bg-blue-600 text-white text-center py-20">
-        <h1 className="text-5xl font-bold">Your Ultimate Travel Planner</h1>
-        <p className="mt-4 text-xl max-w-3xl mx-auto">
-          Plan your next adventure with ease — track your budget, explore new
-          destinations, and get real-time info about places, transport, and events.
-        </p>
-        <button className="mt-8 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-200 transition">
-          Get Started
-        </button>
-      </section>
-    )
-  }
-  
+
+import Link from "next/link"
+
+const Hero = () => {
+
+  return (
+    <div
+      className="hero min-h-screen"
+      style={{ backgroundImage: "url('./assets/heroPicture.jpg')" }}>
+      <div className="hero-overlay"></div>
+      <div className="hero-content text-neutral-content text-center">
+        <div className="max-w-md">
+          <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
+          <p className="mb-5">
+            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+            quasi. In deleniti eaque aut repudiandae et a id nisi.
+          </p>
+          <Link href="/register">
+            <button className="btn btn-primary">Get Started</button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Hero;

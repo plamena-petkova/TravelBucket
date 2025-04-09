@@ -1,15 +1,38 @@
+// import './globals.css'
+// import { ReactNode } from 'react'
+
+// export const metadata = {
+//   title: 'Travel Bucket',
+//   description: 'Your personal travel diary, anywhere you go.',
+// }
+
+// export default function RootLayout({ children }: { children: ReactNode }) {
+//   return (
+//     <html lang="en">
+//       <body>{children}</body>
+//     </html>
+//   )
+// }
+
+
+import React, { Suspense } from 'react';
 import './globals.css'
-import { ReactNode } from 'react'
+import Loading from '@/components/Loading';
+
 
 export const metadata = {
-  title: 'Travel Bucket',
-  description: 'Your personal travel diary, anywhere you go.',
-}
+  title: 'TravelBucket',
+  description: 'Your next adventure starts here!',
+};
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
-}
+    <Suspense fallback={<Loading />}>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </Suspense>
+  );
+};
+
+export default Layout;
