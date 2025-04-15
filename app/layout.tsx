@@ -11,7 +11,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
 
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <main className="min-h-screen bg-white text-gray-900">{children}
+        </main>
+      </body>
     </html>
 
   );

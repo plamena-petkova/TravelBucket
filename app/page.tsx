@@ -9,12 +9,10 @@ export default function Home() {
 
 
   return (
-
-    <main className="min-h-screen bg-white text-gray-900">
-      <Suspense fallback={<Loading />}>
-        <Hero />
-        <Features />
-        <Footer />
-      </Suspense>
-    </main>)
+    <Suspense fallback={<Loading />}>
+      <Hero />
+      <Features />
+      <Footer />
+    </Suspense>
+  )
 }
