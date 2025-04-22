@@ -1,13 +1,37 @@
 'use client'
 import Image from "next/image";
 import heroImage from '@/public/assets/heroPicture.jpg'
-import { useState } from "react";
+import React, { useState } from "react";
+
+interface UserProps {
+    name?: String,
+    email: String,
+    password: String
+}
 
 export default function Register() {
     const [form, setForm] = useState<string>('register');
+    const [registerValues, setRegisterValues] = useState<UserProps>({ name: '', email: '', password: '' })
+    const [loginValues, setLoginValues] = useState<UserProps>({ email: '', password: '' })
 
     const handleForm = (formName: string) => {
         setForm(formName);
+    }
+
+    const handleRegisterValues = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setRegisterValues((prevValues) => ({
+            ...prevValues,
+            [name]: value,
+        }));
+    }
+
+    const handleLoginValues = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setLoginValues((prevValues) => ({
+            ...prevValues,
+            [name]: value,
+        }));
     }
 
     return (
@@ -38,29 +62,29 @@ export default function Register() {
                     {form === 'register' && <><h2 className="card-title">Register Form</h2>
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Name</legend>
-                            <input type="text" className="input" placeholder="Type here" />
+                            <input onChange={(e) => handleRegisterValues(e)} name="name" type="text" className="input" placeholder="Type here" />
                         </fieldset>
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Email</legend>
-                            <input type="text" className="input" placeholder="Type here" />
+                            <input onChange={(e) => handleRegisterValues(e)} name="email" type="text" className="input" placeholder="Type here" />
                         </fieldset>
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Password</legend>
-                            <input type="text" className="input" placeholder="Type here" />
+                            <input onChange={(e) => handleRegisterValues(e)} name="password" type="text" className="input" placeholder="Type here" />
                         </fieldset>
-                        <button className="btn btn-primary m-2">Register</button></>}
+                        <button onClick={() => console.log('Register valies', registerValues)} className="btn btn-primary m-2">Register</button></>}
 
                     {form === 'login' && <><h2 className="card-title">Login Form</h2>
 
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Email</legend>
-                            <input type="text" className="input" placeholder="Type here" />
+                            <input onChange={(e) => handleLoginValues(e)} name="email" type="text" className="input" placeholder="Type here" />
                         </fieldset>
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Password</legend>
-                            <input type="text" className="input" placeholder="Type here" />
+                            <input onChange={(e) => handleLoginValues(e)} name="password" type="text" className="input" placeholder="Type here" />
                         </fieldset>
-                        <button className="btn btn-primary m-2">Login</button>
+                        <button onClick={() => console.log('Login Values', loginValues)} className="btn btn-primary m-2">Login</button>
                     </>}
                 </div>
             </div>
