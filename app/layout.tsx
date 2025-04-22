@@ -1,5 +1,6 @@
 import React from 'react';
 import './globals.css'
+import connectDB from '@/config/database';
 
 
 export const metadata = {
@@ -7,7 +8,10 @@ export const metadata = {
   description: 'Your next adventure starts here!',
 };
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  
+  await connectDB();
+
   return (
 
     <html lang="en">
