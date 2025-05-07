@@ -6,79 +6,53 @@ import connectDB from "@/config/database";
 import * as bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
-
   providers: [
     CredentialsProvider({
-        name:'Email',
-        credentials:{
-            email:{label:"Email",type: "text", placeholder: "j.smith@email.com"},
-            password: {  label: "Password", type: "password", placeholder:"*******" }
-        },
-        async authorize(credentials) {
-          if(!credentials?.email || !credentials?.password) {
-            return null;
-          }
+      name: "Email",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null;
 
-          const user = await User.findOne({
-            where:{
-              email:credentials.email
-            }
-          });
+        const user = await User.findOne({ email: credentials.email });
+        if (!user || !user.password) return null;
 
-          if(!user) {
-            return null;
-          }
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!isValid) return null;
 
-          if(user && user.password) {
-            const passwordMatch = await bcrypt.compare(credentials.password, user.password);
-
-            if(!passwordMatch) {
-              return null
-            }
-          }
-          return user;
-        }
-
+        return { id: user._id, name: user.name, email: user.email };
+      },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  session:{
-    strategy:'jwt'
+  session: {
+    strategy: "jwt",
   },
-    callbacks: {
-        //Invoked on successfull sign in
-        async signIn({user}) {
-            //1. Connectto the database
-            await connectDB();
+  callbacks: {
+    async signIn({ user }) {
+      try {
+        await connectDB();
 
-            //2. Check if user exists
+        const userExists = await User.findOne({ email: user.email });
 
-            const userExists = await User.findOne({email:user.email});
+        if (!userExists) {
+          await User.create({
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          });
+        }
 
-            //3. If not, create user
-            if(!userExists) {
-    
-
-                await User.create({
-                    email:user.email,
-                    name:user.name,
-                    image:user.image
-                });
-
-            }
-            //4. Return true to allow sign in
-
-            return true;
-        },
-        //Session callback function that modifies the session object
-        // async session({session}) {
-        //     //1. Get the user from the database
-        //     const user = await User.findOne({email:session.user.email});
-        
-        //     //2. Sign the user id from the session
-        //     session.user.id = user._id.toString();
-        //     //3. Return session
-        //     return session;
-        // }
+        return true;
+      } catch (err) {
+        console.error("signIn callback error:", err);
+        return false;
+      }
     }
+  },
 };

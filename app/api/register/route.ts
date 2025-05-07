@@ -3,7 +3,6 @@ import User from "@/models/User";
 import * as bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
-  console.log("Data", request);
 try {
   const { name, email, password } = await request.json();
 

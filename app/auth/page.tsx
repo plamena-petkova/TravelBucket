@@ -2,6 +2,8 @@
 import Image from "next/image";
 import heroImage from '@/public/assets/heroPicture.jpg'
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 interface UserProps {
     name?: String,
@@ -10,6 +12,9 @@ interface UserProps {
 }
 
 export default function Register() {
+
+    const router = useRouter();
+
     const [form, setForm] = useState<string>('register');
     const [registerValues, setRegisterValues] = useState<UserProps>({ name: '', email: '', password: '' })
     const [loginValues, setLoginValues] = useState<UserProps>({ email: '', password: '' })
@@ -34,25 +39,48 @@ export default function Register() {
         }));
     }
 
-    const handleSubmit = async () => {
-    console.log('submit')
+    const handleRegisterSubmit = async () => {
         try {
-            const res = await fetch('http://localhost:3000/api/register', {
+            const res = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(registerValues),
             });
 
             const data = await res.json();
-            console.log('res', data)
+        
             if (!res.ok) throw new Error(data.message || 'Registration failed');
-            alert('Registration successful!');
+            if (res.ok) {
+                router.push("/");
+              }
         } catch (err) {
             console.error(err);
             alert('Registration error!');
         }
-
     }
+
+    const handleLoginSubmit = async (e: React.FormEvent) => {
+
+            e.preventDefault();
+
+            const {email, password} = loginValues
+        
+            const res = await signIn('credentials', {
+              email,
+              password,
+              redirect: false, 
+            });
+        
+            if (res?.ok) {
+              router.push('/');
+            } else {
+              alert('Login failed');
+            }
+    
+        
+    }
+
+
 
     return (
         <div className="h-screen flex justify-center items-center">
@@ -92,7 +120,7 @@ export default function Register() {
                             <legend className="fieldset-legend">Password</legend>
                             <input onChange={(e) => handleRegisterValues(e)} name="password" type="text" className="input" placeholder="Type here" />
                         </fieldset>
-                        <button type="submit" onClick={handleSubmit} className="btn btn-primary m-2">Register</button></>}
+                        <button type="submit" onClick={handleRegisterSubmit} className="btn btn-primary m-2">Register</button></>}
 
                     {form === 'login' && <><h2 className="card-title">Login Form</h2>
 
@@ -104,7 +132,7 @@ export default function Register() {
                             <legend className="fieldset-legend">Password</legend>
                             <input onChange={(e) => handleLoginValues(e)} name="password" type="text" className="input" placeholder="Type here" />
                         </fieldset>
-                        <button onClick={() => console.log('Login Values', loginValues)} className="btn btn-primary m-2">Login</button>
+                        <button type="submit" onClick={handleLoginSubmit} className="btn btn-primary m-2">Login</button>
                     </>}
                 </div>
             </div>
