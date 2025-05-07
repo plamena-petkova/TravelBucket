@@ -34,6 +34,26 @@ export default function Register() {
         }));
     }
 
+    const handleSubmit = async () => {
+    console.log('submit')
+        try {
+            const res = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(registerValues),
+            });
+
+            const data = await res.json();
+            console.log('res', data)
+            if (!res.ok) throw new Error(data.message || 'Registration failed');
+            alert('Registration successful!');
+        } catch (err) {
+            console.error(err);
+            alert('Registration error!');
+        }
+
+    }
+
     return (
         <div className="h-screen flex justify-center items-center">
             <div className="card flex-col lg:card-side bg-base-100 shadow-sm">
@@ -72,7 +92,7 @@ export default function Register() {
                             <legend className="fieldset-legend">Password</legend>
                             <input onChange={(e) => handleRegisterValues(e)} name="password" type="text" className="input" placeholder="Type here" />
                         </fieldset>
-                        <button onClick={() => console.log('Register valies', registerValues)} className="btn btn-primary m-2">Register</button></>}
+                        <button type="submit" onClick={handleSubmit} className="btn btn-primary m-2">Register</button></>}
 
                     {form === 'login' && <><h2 className="card-title">Login Form</h2>
 
