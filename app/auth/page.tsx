@@ -4,12 +4,7 @@ import heroImage from '@/public/assets/heroPicture.jpg'
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-
-interface UserProps {
-    name?: String,
-    email: String,
-    password: String
-}
+import { UserProps } from "@/interfaces/interfaces";
 
 export default function Register() {
 

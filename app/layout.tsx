@@ -1,6 +1,9 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import './globals.css'
 import connectDB from '@/config/database';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Providers from './providers';
 
 
 export const metadata = {
@@ -9,15 +12,19 @@ export const metadata = {
 };
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  
-  await connectDB();
+
+
 
   return (
 
     <html lang="en">
       <body>
-        <main className="min-h-screen bg-white text-gray-900">{children}
-        </main>
+        <Providers>
+          <main className="min-h-screen bg-white text-gray-900">{children}
+          </main>
+        </Providers>
+
+
       </body>
     </html>
 
