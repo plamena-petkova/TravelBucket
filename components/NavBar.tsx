@@ -1,9 +1,17 @@
 'use client'
 import { useUserStore } from '@/stores/userStore';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 const NavBar = () => {
+    const { clearUser } = useUserStore();
     const user = useUserStore((state) => state.user);
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const handleLogout = () => {
+        clearUser();
+        setIsDropdownOpen((prev) => !prev);
+    }
 
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -13,7 +21,7 @@ const NavBar = () => {
             <div className="flex gap-2">
                 <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
                 <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                    {user && <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                         {user?.image ? <div className="w-10 rounded-full">
                             <img
                                 alt="Tailwind CSS Navbar component"
@@ -22,8 +30,10 @@ const NavBar = () => {
                                 <span>{user?.name?.charAt(0).toUpperCase()}</span>
                             </div>
                         </div>}
-                    </div>
+                    </div>}
+
                     <ul
+
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li>
@@ -33,7 +43,7 @@ const NavBar = () => {
                             </a>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li><a onClick={handleLogout}>Logout</a></li>
                     </ul>
                 </div>
             </div>

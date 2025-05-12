@@ -1,24 +1,23 @@
-
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 import User from '@/models/User';
 import connectDB from '@/config/database';
 
 export async function GET() {
-  try {
-    // Connect to the DB
-    await connectDB();
+  await connectDB();
 
-    // Fetch the first user from the database (or modify this as needed)
-    const user = await User.findOne({}); // For example, fetching the first user
+  const session = await getServerSession(authOptions);
 
-    if (!user) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
-
-    // Return the user data as JSON
-    return NextResponse.json(user);
-  } catch (err) {
-    console.error('Error fetching user:', err);
-    return NextResponse.json({ message: 'Failed to fetch user' }, { status: 500 });
+  if (!session?.user?.email) {
+    return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
   }
+
+  const user = await User.findOne({ email: session.user.email }).lean();
+
+  if (!user) {
+    return NextResponse.json({ message: 'User not found' }, { status: 404 });
+  }
+
+  return NextResponse.json(user);
 }

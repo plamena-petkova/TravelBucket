@@ -3,8 +3,8 @@ export interface UserProps {
   name?: String;
   email: String;
   password: String;
-  image: String;
-  trips: any;
+  image?: String;
+  trips?: any;
 }
 
 export interface UserState {

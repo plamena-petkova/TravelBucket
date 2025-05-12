@@ -9,6 +9,7 @@ const Hero = () => {
 
    const user = useUserStore((state) => state.user);
 
+   console.log('User', user);
 
   return (
 

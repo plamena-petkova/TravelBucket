@@ -5,14 +5,16 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { UserProps } from "@/interfaces/interfaces";
+import { useUserStore } from "@/stores/userStore";
 
 export default function Register() {
 
     const router = useRouter();
+    const { setUser } = useUserStore();
 
     const [form, setForm] = useState<string>('register');
-    const [registerValues, setRegisterValues] = useState<UserProps>({ name: '', email: '', password: '' })
-    const [loginValues, setLoginValues] = useState<UserProps>({ email: '', password: '' })
+    const [registerValues, setRegisterValues] = useState<UserProps>({_id:'', name: '', email: '', password: '' })
+    const [loginValues, setLoginValues] = useState<UserProps>({ _id:'', email: '', password: '' })
 
     const handleForm = (formName: string) => {
         setForm(formName);
@@ -43,11 +45,11 @@ export default function Register() {
             });
 
             const data = await res.json();
-        
+
             if (!res.ok) throw new Error(data.message || 'Registration failed');
             if (res.ok) {
                 router.push("/");
-              }
+            }
         } catch (err) {
             console.error(err);
             alert('Registration error!');
@@ -56,23 +58,26 @@ export default function Register() {
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            const {email, password} = loginValues
-        
-            const res = await signIn('credentials', {
-              email,
-              password,
-              redirect: false, 
-            });
-        
-            if (res?.ok) {
-              router.push('/');
-            } else {
-              alert('Login failed');
-            }
-    
-        
+        const { email, password } = loginValues
+
+        const res = await signIn('credentials', {
+            email,
+            password,
+            redirect: false,
+        });
+
+        if (res?.ok) {
+            const userRes = await fetch('/api/user'); 
+            const userData = await userRes.json();
+            setUser(userData);
+            router.push('/');
+        } else {
+            alert('Login failed');
+        }
+
+
     }
 
 
