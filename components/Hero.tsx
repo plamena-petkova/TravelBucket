@@ -1,8 +1,5 @@
 'use client'
-import { UserProps } from "@/interfaces/interfaces";
-import { fetchUser } from "@/services/userService";
 import { useUserStore } from "@/stores/userStore";
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link"
 
 const Hero = () => {
@@ -13,7 +10,7 @@ const Hero = () => {
 
     <div
       className="hero min-h-screen"
-      style={{ backgroundImage: "url('./assets/heroPicture.jpg')" }}>
+      style={{ backgroundImage: "url('/assets/heroPicture.jpg')" }}>
       <div className="hero-overlay"></div>
 
       <div className="hero-content text-neutral-content text-center">

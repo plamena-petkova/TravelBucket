@@ -1,17 +1,14 @@
 'use client'
 import { useUserStore } from '@/stores/userStore';
 import Link from 'next/link';
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
 const NavBar = () => {
     const { clearUser } = useUserStore();
     const user = useUserStore((state) => state.user);
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
     const handleLogout = () => {
         clearUser();
-        setIsDropdownOpen((prev) => !prev);
     }
 
     return (
@@ -26,7 +23,7 @@ const NavBar = () => {
                         {user?.image ? <div className="w-10 rounded-full">
                             <img
                                 alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" /></div> : <div className="avatar avatar-placeholder">
+                                src={user.image} /></div> : <div className="avatar avatar-placeholder">
                             <div className=" w-9 rounded-full bg-neutral text-neutral-content">
                                 <span>{user?.name?.charAt(0).toUpperCase()}</span>
                             </div>
@@ -40,7 +37,6 @@ const NavBar = () => {
                         <li>
                             <Link href={`/profile/${user?._id}`}  className="justify-between">
                                 Profile
-                                <span className="badge">New</span>
                             </Link>
                         </li>
                         <li><a>Settings</a></li>

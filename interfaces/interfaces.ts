@@ -1,9 +1,9 @@
 export interface UserProps {
-  _id: String;
-  name?: String;
-  email: String;
-  password: String;
-  image?: String;
+  _id: string;
+  name?: string;
+  email: string;
+  password: string;
+  image?:string;
   trips?: any;
 }
 
