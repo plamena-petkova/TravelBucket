@@ -11,7 +11,6 @@ export default function Home() {
 
   return (
     <Suspense fallback={<Loading />}>
-      <NavBar />
       <Hero />
       <Features />
       <Footer />
