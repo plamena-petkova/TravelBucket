@@ -12,7 +12,7 @@ try {
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    return new NextResponse("User already exists", { status: 400 });
+    return NextResponse.json({ message: "User already exists" }, { status: 400 });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,6 +22,6 @@ try {
   return NextResponse.json({ message: "success" });
 } catch (error) {
   console.error("Server Error:", error);
-  return new NextResponse("Internal Server Error", { status: 500 });
+  return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
 }
 }

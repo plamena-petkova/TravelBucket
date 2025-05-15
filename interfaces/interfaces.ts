@@ -12,3 +12,10 @@ export interface UserState {
   setUser: (user: UserProps) => void;
   clearUser: () => void;
 }
+
+export interface AlertProps {
+  alertMessage:string,
+  alertType:TypeAlertProps,
+}
+
+export type TypeAlertProps = 'alert-warning' | 'alert-info' | 'alert-error';
