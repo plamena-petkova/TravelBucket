@@ -11,6 +11,7 @@ const NavBar = () => {
 
     const handleLogout = () => {
         clearUser();
+        router.push('/');
         const elem = document.activeElement;
         if (elem instanceof HTMLElement) {
             elem.blur();
