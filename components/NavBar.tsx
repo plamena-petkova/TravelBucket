@@ -1,15 +1,31 @@
 'use client'
 import { useUserStore } from '@/stores/userStore';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const NavBar = () => {
     const { clearUser } = useUserStore();
     const user = useUserStore((state) => state.user);
+    const router = useRouter();
 
     const handleLogout = () => {
         clearUser();
+        const elem = document.activeElement;
+        if (elem instanceof HTMLElement) {
+            elem.blur();
+        }
     }
+
+    const handleProfileView = () => {
+        router.push(`/profile/${user?._id}`);
+        const elem = document.activeElement;
+        if (elem instanceof HTMLElement) {
+            elem.blur();
+        }
+
+    }
+
 
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -35,9 +51,9 @@ const NavBar = () => {
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li>
-                            <Link href={`/profile/${user?._id}`}  className="justify-between">
+                            <button onClick={handleProfileView} className="justify-between">
                                 Profile
-                            </Link>
+                            </button>
                         </li>
                         <li><a>Settings</a></li>
                         <li><a onClick={handleLogout}>Logout</a></li>
