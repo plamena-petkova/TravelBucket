@@ -1,5 +1,8 @@
 // app/profile/[id]/page.tsx
 
+import Drawer from "@/components/Drawer";
+import { UserProps } from "@/interfaces/interfaces";
+
 type Props = {
   params: { id: string };
 };
@@ -22,14 +25,12 @@ export default async function ProfilePage({ params }: Props) {
   }
 
   
-  const user = await res.json();
+  const user = await res.json() as UserProps;
 
  
   return (
     <div>
-      <h1>Profile: {user.name}</h1>
-      <p>Username: {user.username}</p>
-      <p>Email: {user.email}</p>
+      <Drawer {...user} />
     </div>
   );
 }

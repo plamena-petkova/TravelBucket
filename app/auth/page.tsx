@@ -148,7 +148,7 @@ export default function Register() {
                             </fieldset>
                             <fieldset className="fieldset">
                                 <legend className="fieldset-legend">Password</legend>
-                                <input onChange={(e) => handleLoginValues(e)} name="password" type="text" className="input" placeholder="Type here" />
+                                <input onChange={(e) => handleLoginValues(e)} name="password" type="password" className="input" placeholder="Type here" />
                             </fieldset>
                             <button type="submit" onClick={handleLoginSubmit} className="btn btn-primary m-2">Login</button>
                         </>}
