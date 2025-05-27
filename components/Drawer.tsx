@@ -1,6 +1,7 @@
 'use client'
 import { UserProps } from '@/interfaces/interfaces';
 import React, { useState } from 'react';
+import TripCard from './TripCard';
 
 function Drawer(user: UserProps) {
 
@@ -14,11 +15,11 @@ function Drawer(user: UserProps) {
 
     return (
         <div>
-            <div className="flex h-screen m-3">
+            <div className="lg:flex md:flex sm:flex-row h-screen m-3">
 
-                <div className="w-64 bg-base-200 p-4">
+                <div className=" bg-base-200 p-4">
 
-                    <ul className="menu bg-base-200 rounded-box w-56">
+                    <ul className="lg:menu-lg md:menu-md sm:menu-sm menu bg-base-200 rounded-box w-56">
                         <li>
                             <button name='dashboard' onClick={handleSelectMenu}>
                                 <svg
@@ -81,6 +82,8 @@ function Drawer(user: UserProps) {
                     <h1>Profile: {user.name}</h1>
                     <p>Email: {user.email}</p>
                 </div>}
+
+                {menu === 'trips' && <div className='flex justify-center flex-wrap'></div>}
 
             </div>
 
