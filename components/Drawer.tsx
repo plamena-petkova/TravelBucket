@@ -1,7 +1,6 @@
 'use client'
 import { UserProps } from '@/interfaces/interfaces';
 import React, { useState } from 'react';
-import TripCard from './TripCard';
 
 function Drawer(user: UserProps) {
 
@@ -72,6 +71,9 @@ function Drawer(user: UserProps) {
                                 </svg>
                                 Profile
                             </button>
+                        </li>
+                        <li>
+                            <a href={`${user._id}/add-trip`}>Add trip</a>
                         </li>
                     </ul>
 

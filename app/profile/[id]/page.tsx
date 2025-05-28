@@ -1,5 +1,3 @@
-// app/profile/[id]/page.tsx
-
 import Drawer from "@/components/Drawer";
 import { UserProps } from "@/interfaces/interfaces";
 

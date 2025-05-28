@@ -4,7 +4,7 @@ import React from 'react';
 const TripCard = (trip: TripProps) => {
 
     const handleClick = () => {
-        console.log('Click')
+        console.log('Click', trip)
     }
 
     return (
