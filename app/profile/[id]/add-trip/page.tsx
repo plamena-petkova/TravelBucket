@@ -1,11 +1,12 @@
 'use client'
+import { useUserStore } from '@/stores/userStore';
 import React, { useState } from 'react';
 
 type TripFormState = {
   title: string;
   description?: string;
-  startDate: string;
-  endDate: string;
+  startDateTrip: string;
+  endDateTrip: string;
   destination: {
     city?: string;
     country?: string;
@@ -16,12 +17,25 @@ type TripFormState = {
     };
   };
   transport: {
+    destination: '',
+    roundTrip: 'yes' | 'no',
     transportType: 'flight' | 'bus' | 'train';
+    transportNumber: '',
     arrivalDate: string,
     departureDate: string,
     price: number,
+    pdfTickets: [],
   }[];
-  accommodation: any[];
+  accommodation: {
+    coordinates: {
+      lat: Number,
+      lng: Number,
+    },
+    bookingId: string,
+    address: string,
+    checkIn: string,
+    checkOut: string,
+  };
   participants: {
     userId: string;
     name: string;
@@ -53,24 +67,32 @@ type TripFormState = {
 const defaultTrip: TripFormState = {
   title: '',
   description: '',
-  startDate: '',
-  endDate: '',
+  startDateTrip: '',
+  endDateTrip: '',
   destination: {
     city: '',
-    country: '',
-    address: '',
+    country: ''
+  },
+  transport: [{
+    destination: '',
+    roundTrip: 'yes',
+    transportType: 'flight',
+    transportNumber: '',
+    arrivalDate: '',
+    departureDate: '',
+    price: 0,
+    pdfTickets: [],
+  }],
+  accommodation: {
     coordinates: {
       lat: 0,
       lng: 0,
     },
+    bookingId: '',
+    address: '',
+    checkIn: '',
+    checkOut: '',
   },
-  transport: [{
-    transportType: "bus",
-    arrivalDate: '',
-    departureDate: '',
-    price: 0,
-  }],
-  accommodation: [],
   participants: [],
   itinerary: [],
   budget: {
@@ -93,6 +115,10 @@ const defaultTrip: TripFormState = {
 };
 
 const TripForm: React.FC = () => {
+
+
+  const user = useUserStore((state) => state.user);
+
   const [trip, setTrip] = useState<TripFormState>(defaultTrip);
 
   const handleChange = (path: string[], value: any) => {
@@ -108,18 +134,24 @@ const TripForm: React.FC = () => {
   };
 
   const handleTransportChange = (index: number, field: string, value: string | number) => {
-  const updated = [...trip.transport];
-  updated[index] = {
-    ...updated[index],
-    [field]: field === 'price' ? Number(value) : value,
+    const updated = [...trip.transport];
+    updated[index] = {
+      ...updated[index],
+      [field]: field === 'price' ? Number(value) : value,
+    };
+    setTrip({ ...trip, transport: updated });
   };
-  setTrip({ ...trip, transport: updated });
-};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (user) {
+      trip.createdBy.userId = user._id;
+      trip.createdBy.email = user.email;
+    }
+
+
     console.log('Submitting trip:', trip);
-    // Send to backend here
+
   };
 
   return (
@@ -144,14 +176,14 @@ const TripForm: React.FC = () => {
         <input
           type="date"
           className="input input-bordered"
-          value={trip.startDate}
-          onChange={e => handleChange(['startDate'], e.target.value)}
+          value={trip.startDateTrip}
+          onChange={e => handleChange(['startDateTrip'], e.target.value)}
         />
         <input
           type="date"
           className="input input-bordered"
-          value={trip.endDate}
-          onChange={e => handleChange(['endDate'], e.target.value)}
+          value={trip.endDateTrip}
+          onChange={e => handleChange(['endDateTrip'], e.target.value)}
         />
       </div>
 
@@ -171,24 +203,36 @@ const TripForm: React.FC = () => {
         />
         <input
           className="input input-bordered w-full my-1"
-          placeholder="Address"
-          value={trip.destination.address}
-          onChange={e => handleChange(['destination', 'address'], e.target.value)}
+          placeholder="Accommodation"
+          value={trip.accommodation.address}
+          onChange={e => handleChange(['accommodation', 'address'], e.target.value)}
         />
         <input
           className="input input-bordered w-full my-1"
-          placeholder="Accommodation"
-          value={trip.accommodation}
-          onChange={e => handleChange(['accommodation'], e.target.value)}
+          placeholder="BookingId"
+          value={trip.accommodation.bookingId}
+          onChange={e => handleChange(['accommodation', 'bookingId'], e.target.value)}
+        />
+        <input
+          className="input input-bordered w-full my-1"
+          placeholder="CheckIn"
+          value={trip.accommodation.checkIn}
+          onChange={e => handleChange(['accommodation', 'checkIn'], e.target.value)}
+        />
+        <input
+          className="input input-bordered w-full my-1"
+          placeholder="CheckOut"
+          value={trip.accommodation.checkOut}
+          onChange={e => handleChange(['accommodation', 'checkOut'], e.target.value)}
         />
       </div>
 
-<div className="bg-base-200 p-4 rounded-lg">
-  <h3 className="text-lg font-semibold mb-2">Transportation</h3>
+      {/* <div className="bg-base-200 p-4 rounded-lg">
+        <h3 className="text-lg font-semibold mb-2">Transportation</h3>
 
-  {trip.transport.map((item, index) => (
-    <div key={index} className="mb-4 border p-3 rounded-lg bg-base-100">
-       <select
+        {trip.transport.map((item, index) => (
+          <div key={index} className="mb-4 border p-3 rounded-lg bg-base-100">
+            <select
               className="select select-bordered"
               value={item.transportType}
               onChange={e => handleTransportChange(index, 'transportType', e.target.value)}
@@ -198,30 +242,40 @@ const TripForm: React.FC = () => {
               <option value="viewer">Train</option>
             </select>
 
-      <input
-        className="input input-bordered w-full mb-2"
-        type="date"
-        placeholder="Departure Date"
-        value={item.departureDate}
-        onChange={e => handleTransportChange(index, 'departureDate', e.target.value)}
-      />
-      <input
-        className="input input-bordered w-full mb-2"
-        type="date"
-        placeholder="Arrival Date"
-        value={item.arrivalDate}
-        onChange={e => handleTransportChange(index, 'arrivalDate', e.target.value)}
-      />
-      <input
-        className="input input-bordered w-full"
-        type="number"
-        placeholder="Price"
-        value={item.price}
-        onChange={e => handleTransportChange(index, 'price', e.target.value)}
-      />
-    </div>
-  ))}
-</div>
+            <input
+              className="input input-bordered w-full mb-2"
+              type="date"
+              placeholder="Destination"
+              value={item.destination}
+              onChange={e => handleTransportChange(index, 'destination', e.target.value)}
+            />
+
+            <input
+              className="input input-bordered w-full mb-2"
+              type="date"
+              placeholder="Destination"
+              value={item.departureDate}
+              onChange={e => handleTransportChange(index, 'departureDate', e.target.value)}
+            />
+
+            <input
+              className="input input-bordered w-full mb-2"
+              type="text"
+              placeholder="Destination"
+              value={item.departureDate}
+              onChange={e => handleTransportChange(index, 'destination', e.target.value)}
+            />
+
+            <input
+              className="input input-bordered w-full"
+              type="number"
+              placeholder="Price"
+              value={item.price}
+              onChange={e => handleTransportChange(index, 'price', e.target.value)}
+            />
+          </div>
+        ))}
+      </div>
 
 
       <div className="bg-base-200 p-4 rounded-lg">
@@ -313,7 +367,7 @@ const TripForm: React.FC = () => {
             </select>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <button type="submit" className="btn btn-primary w-full">
         Submit Trip
