@@ -142,17 +142,36 @@ const TripForm: React.FC = () => {
     setTrip({ ...trip, transport: updated });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (user) {
-      trip.createdBy.userId = user._id;
-      trip.createdBy.email = user.email;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  if (user) {
+    trip.createdBy.userId = user._id;
+    trip.createdBy.email = user.email;
+  }
+
+  try {
+    const res = await fetch('/api/trips', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(trip),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      console.log('Trip created with ID:', data.tripId);
+      // Optionally redirect or show success UI
+    } else {
+      console.error('Error creating trip:', data.message);
     }
+  } catch (error) {
+    console.error('Network error:', error);
+  }
+  // console.log('trip', trip)
+};
 
-
-    console.log('Submitting trip:', trip);
-
-  };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 space-y-6">

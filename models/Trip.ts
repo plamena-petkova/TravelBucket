@@ -5,8 +5,8 @@ const TripSchema = new Schema<TripProps>(
   {
     title: { type: String, required: true },
     description: String,
-    startDate: { type: String, required: true },
-    endDate: { type: String, required: true },
+    startDateTrip: { type: String, required: true },
+    endDateTrip: { type: String, required: true },
 
     destination: {
       city: String,
@@ -100,6 +100,7 @@ const TripSchema = new Schema<TripProps>(
   { timestamps: true }
 );
 
-const Trip = mongoose.model<TripProps>('Trip', TripSchema);
+//const Trip = mongoose.model<TripProps>('Trip', TripSchema);
+const Trip = mongoose.models.Trip || mongoose.model('Trip', TripSchema);
 
 export default Trip;

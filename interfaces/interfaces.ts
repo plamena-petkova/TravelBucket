@@ -94,8 +94,8 @@ interface Budget {
 export interface TripProps extends Document {
   title: string;
   description?: string;
-  startDate: string;
-  endDate: string;
+  startDateTrip: string;
+  endDateTrip: string;
   destination: Destination;
   transport: Transport[];
   accommodation: Accommodation[];
