@@ -18,8 +18,8 @@ const NavBar = () => {
         }
     }
 
-    const handleProfileView = () => {
-        router.push(`/profile/${user?._id}`);
+    const handleDashboardView = () => {
+        router.push(`/dashboard/${user?._id}`);
         const elem = document.activeElement;
         if (elem instanceof HTMLElement) {
             elem.blur();
@@ -52,7 +52,7 @@ const NavBar = () => {
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li>
-                            <button onClick={handleProfileView} className="justify-between">
+                            <button onClick={handleDashboardView} className="justify-between">
                                 Dashboard
                             </button>
                         </li>
