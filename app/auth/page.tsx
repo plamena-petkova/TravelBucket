@@ -99,7 +99,7 @@ export default function Register() {
     return (
         <>
             {error && (
-                <AlertComponent alertType='alert-error' alertMessage={error} />
+                <AlertComponent alertPosition='bottom' alertType='alert-error' alertMessage={error} />
             )}
             <div className="h-screen flex justify-center items-center">
                 <div className="card flex-col lg:card-side bg-base-100 shadow-sm">

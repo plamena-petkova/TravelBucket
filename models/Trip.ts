@@ -3,46 +3,16 @@ import mongoose, { Schema } from 'mongoose';
 
 const TripSchema = new Schema<TripProps>(
   {
-    title: { type: String, required: true },
-    description: String,
+    title: { type: String, required: true, minlength:6 },
+    description:{ type: String, maxlength:100 },
     startDateTrip: { type: String, required: true },
     endDateTrip: { type: String, required: true },
 
     destination: {
-      city: String,
-      country: String,
-      address: String,
-      coordinates: {
-        lat: Number,
-        lng: Number,
-      },
+      city:  { type: String, required: true },
+      country:  { type: String, required: true },
     },
 
-    transport: [
-      {
-        mode: { type: String, enum: ['flight', 'train', 'car', 'bus', 'boat', 'other'] },
-        provider: String,
-        bookingReference: String,
-        departureTime: String,
-        arrivalTime: String,
-        from: String,
-        to: String,
-        notes: String,
-      },
-    ],
-
-    accommodation: [
-      {
-        name: String,
-        address: String,
-        checkIn: String,
-        checkOut: String,
-        bookingReference: String,
-        type: { type: String, enum: ['hotel', 'hostel', 'airbnb', 'camping', 'other'] },
-        contact: String,
-        notes: String,
-      },
-    ],
 
     participants: [
       {
@@ -50,39 +20,8 @@ const TripSchema = new Schema<TripProps>(
         name: String,
         email: String,
         avatarUrl: String,
-        role: { type: String, enum: ['admin', 'member', 'viewer'] },
-        status: { type: String, enum: ['invited', 'joined', 'declined'] },
       },
     ],
-
-    itinerary: [
-      {
-        date: String,
-        activities: [
-          {
-            time: String,
-            title: String,
-            description: String,
-            location: String,
-            imageUrl: String,
-            cost: Number,
-          },
-        ],
-      },
-    ],
-
-    budget: {
-      totalEstimate: Number,
-      actualSpent: Number,
-      currency: String,
-      breakdown: [
-        {
-          category: { type: String, enum: ['transport', 'accommodation', 'food', 'activity', 'misc'] },
-          estimate: Number,
-          spent: Number,
-        },
-      ],
-    },
 
     createdBy: {
       userId: { type: String, required: true },
@@ -100,7 +39,6 @@ const TripSchema = new Schema<TripProps>(
   { timestamps: true }
 );
 
-//const Trip = mongoose.model<TripProps>('Trip', TripSchema);
 const Trip = mongoose.models.Trip || mongoose.model('Trip', TripSchema);
 
 export default Trip;
