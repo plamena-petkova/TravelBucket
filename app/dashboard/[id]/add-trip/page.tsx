@@ -1,6 +1,7 @@
 'use client'
 import AlertComponent from '@/components/AlertComponent';
 import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 type TripFormState = {
@@ -53,6 +54,8 @@ const defaultTrip: TripFormState = {
 };
 
 const TripForm: React.FC = () => {
+
+  const router = useRouter();
 
 
   const user = useUserStore((state) => state.user);
@@ -126,61 +129,68 @@ const TripForm: React.FC = () => {
     }
   };
 
+  const handleBackClick = () => {
+    router.back();
+  }
 
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 space-y-6">
-      <h2 className="text-2xl font-bold">Create Trip</h2>
-      {errorMessage !== '' && <AlertComponent alertType='alert-error' alertMessage={errorMessage} alertPosition='middle' />}
-      <input
-        className="input input-bordered w-full"
-        placeholder="Trip Title"
-        value={trip.title}
-        onChange={e => handleChange(['title'], e.target.value)}
-      />
+    <div>
+      <button className="btn m-3 p-4" onClick={handleBackClick}>Back to dashboard</button>
+      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 space-y-6">
 
-      <textarea
-        className="textarea textarea-bordered w-full"
-        placeholder="Description"
-        value={trip.description}
-        onChange={e => handleChange(['description'], e.target.value)}
-      />
+        <h2 className="text-2xl font-bold">Create Trip</h2>
+        {errorMessage !== '' && <AlertComponent alertType='alert-error' alertMessage={errorMessage} alertPosition='middle' />}
+        <input
+          className="input input-bordered w-full"
+          placeholder="Trip Title"
+          value={trip.title}
+          onChange={e => handleChange(['title'], e.target.value)}
+        />
 
-      <div className="grid grid-cols-2 gap-4">
-        <input
-          type="date"
-          className="input input-bordered"
-          value={trip.startDateTrip}
-          onChange={e => handleChange(['startDateTrip'], e.target.value)}
+        <textarea
+          className="textarea textarea-bordered w-full"
+          placeholder="Description"
+          value={trip.description}
+          onChange={e => handleChange(['description'], e.target.value)}
         />
-        <input
-          type="date"
-          className="input input-bordered"
-          value={trip.endDateTrip}
-          onChange={e => handleChange(['endDateTrip'], e.target.value)}
-        />
-      </div>
 
-      <div className="bg-base-200 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold">Destination</h3>
-        <input
-          className="input input-bordered w-full my-1"
-          placeholder="City"
-          value={trip.destination.city}
-          onChange={e => handleChange(['destination', 'city'], e.target.value)}
-        />
-        <input
-          className="input input-bordered w-full my-1"
-          placeholder="Country"
-          value={trip.destination.country}
-          onChange={e => handleChange(['destination', 'country'], e.target.value)}
-        />
-      </div>
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            type="date"
+            className="input input-bordered"
+            value={trip.startDateTrip}
+            onChange={e => handleChange(['startDateTrip'], e.target.value)}
+          />
+          <input
+            type="date"
+            className="input input-bordered"
+            value={trip.endDateTrip}
+            onChange={e => handleChange(['endDateTrip'], e.target.value)}
+          />
+        </div>
 
-      <button type="submit" className="btn btn-primary w-full">
-        Submit Trip
-      </button>
-    </form>
+        <div className="bg-base-200 p-4 rounded-lg">
+          <h3 className="text-lg font-semibold">Destination</h3>
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="City"
+            value={trip.destination.city}
+            onChange={e => handleChange(['destination', 'city'], e.target.value)}
+          />
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Country"
+            value={trip.destination.country}
+            onChange={e => handleChange(['destination', 'country'], e.target.value)}
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary w-full">
+          Submit Trip
+        </button>
+      </form>
+    </div>
   );
 };
 
