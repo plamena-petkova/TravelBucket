@@ -1,8 +1,14 @@
 'use client'
-import { UserProps } from '@/interfaces/interfaces';
+import {  UserProps } from '@/interfaces/interfaces';
 import React, { useState } from 'react';
+import TripCard from './TripCard';
+import { useTripsStore } from '@/stores/userStore';
+
 
 function Drawer(user: UserProps) {
+
+    const trips = useTripsStore((state) => state.trips);
+    console.log('Trips', trips);
 
     const [menu, setMenu] = useState<string>('')
 
@@ -21,9 +27,7 @@ function Drawer(user: UserProps) {
                     <ul className="lg:menu-lg md:menu-md sm:menu-sm menu bg-base-200 rounded-box w-56 h-1/2 justify-around">
                         <li>
                             <button name='dashboard' onClick={handleSelectMenu}>
-
                                 🏠 Dashboard
-
                             </button>
                         </li>
                         <li>
@@ -50,7 +54,9 @@ function Drawer(user: UserProps) {
                     <p>Email: {user.email}</p>
                 </div>}
 
-                {menu === 'trips' && <div className='flex justify-center flex-wrap'></div>}
+                {menu === 'trips' && <div className='flex justify-center flex-wrap'>{trips?.map((trip) => {
+                    return <TripCard trip={trip}/>
+                })}</div>}
 
             </div>
 

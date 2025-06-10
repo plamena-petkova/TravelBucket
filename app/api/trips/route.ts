@@ -24,3 +24,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Failed to create trip', error }, { status: 500 });
   }
 }
+
+
+export async function GET() {
+  await connectDB();
+
+
+  const trips = await Trip.find().lean();
+
+  if (!trips) {
+    return NextResponse.json({ message: 'No trips found' }, { status: 404 });
+  }
+
+  return NextResponse.json(trips);
+}
+

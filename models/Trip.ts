@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 
 const TripSchema = new Schema<TripProps>(
   {
-    title: { type: String, required: true, minlength:6 },
+    title: { type: String, required: true, minlength:4 },
     description:{ type: String, maxlength:100 },
     startDateTrip: { type: String, required: true },
     endDateTrip: { type: String, required: true },

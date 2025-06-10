@@ -13,6 +13,12 @@ export interface UserState {
   clearUser: () => void;
 }
 
+export interface TripsState {
+  trips: TripProps[] | null;
+  setTrips: (trips: TripProps[]) => void;
+  clearTrips: () => void;
+}
+
 export interface AlertProps {
   alertMessage:string,
   alertType:TypeAlertProps,

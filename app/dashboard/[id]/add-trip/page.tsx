@@ -154,6 +154,12 @@ const TripForm: React.FC = () => {
           value={trip.description}
           onChange={e => handleChange(['description'], e.target.value)}
         />
+        <input
+          className="input input-bordered w-full"
+          placeholder="Trip Cover Image"
+          value={trip.coverImageUrl}
+          onChange={e => handleChange(['coverImageUrl'], e.target.value)}
+        />
 
         <div className="grid grid-cols-2 gap-4">
           <input

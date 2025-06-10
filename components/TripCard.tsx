@@ -1,7 +1,12 @@
 import { TripProps } from '@/interfaces/interfaces';
 import React from 'react';
 
-const TripCard = (trip: TripProps) => {
+interface TripCardProps {
+    trip: TripProps;
+}
+
+
+const TripCard = ({ trip }: TripCardProps) => {
 
     const handleClick = () => {
         console.log('Click', trip)
@@ -13,19 +18,29 @@ const TripCard = (trip: TripProps) => {
                 onClick={handleClick}
                 role="button"
                 tabIndex={0}
-                className="cursor-pointer lg:card md:card-md sm:card-sm bg-base-100 w-96 shadow-sm hover:shadow-md transition"
+                className="cursor-pointer lg:card md:card-md sm:card-sm w-96 bg-base-100 shadow-sm hover:shadow-md transition"
                 onKeyDown={(e) => e.key === 'Enter' && handleClick()}
             >
                 <div className="card-body">
-                    <h2 className="card-title">Card Title</h2>
-                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                    <h2 className="card-title">{trip.title}</h2>
+                    <p>{trip.description}</p>
+                    <div className="flex"> <p>{trip.startDateTrip}</p>
+                        <p>{trip.endDateTrip}</p></div>
+                    <div>
+                        <p>{trip.destination.city}, {trip.destination.country}</p>
+
+                    </div>
+
                 </div>
-                <figure>
+                <figure className="w-96 h-52 overflow-hidden">
                     <img
-                        src="https://cdn.pixabay.com/photo/2025/03/31/21/30/italy-9505446_1280.jpg"
-                        alt="Trips" />
+                        src={trip.coverImageUrl}
+                        alt={trip.coverImageUrl?.at(3)}
+                        className="w-full h-full object-cover"
+                    />
                 </figure>
             </div>
+
         </div>
     );
 };
