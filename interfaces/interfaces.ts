@@ -43,6 +43,7 @@ interface Participant {
 }
 
 export interface TripProps extends Document {
+  _id:string;
   title: string;
   description?: string;
   startDateTrip: string;

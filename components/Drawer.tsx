@@ -1,5 +1,5 @@
 'use client'
-import {  UserProps } from '@/interfaces/interfaces';
+import { UserProps } from '@/interfaces/interfaces';
 import React, { useState } from 'react';
 import TripCard from './TripCard';
 import { useTripsStore } from '@/stores/userStore';
@@ -8,9 +8,8 @@ import { useTripsStore } from '@/stores/userStore';
 function Drawer(user: UserProps) {
 
     const trips = useTripsStore((state) => state.trips);
-    console.log('Trips', trips);
 
-    const [menu, setMenu] = useState<string>('')
+    const [menu, setMenu] = useState<string>('dashboard')
 
 
     const handleSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,7 +54,7 @@ function Drawer(user: UserProps) {
                 </div>}
 
                 {menu === 'trips' && <div className='flex justify-center flex-wrap'>{trips?.map((trip) => {
-                    return <TripCard trip={trip}/>
+                    return <TripCard key={trip._id} trip={trip} />
                 })}</div>}
 
             </div>
