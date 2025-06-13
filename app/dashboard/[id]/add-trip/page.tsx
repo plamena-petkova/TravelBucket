@@ -13,6 +13,24 @@ type TripFormState = {
     city?: string;
     country?: string;
   };
+  accomodation: {
+    _id: string;
+    name: string;
+    address: string;
+    checkIn: {
+      date: string;
+      time: string;
+    };
+    checkOut: {
+      date: string;
+      time: string;
+    };
+    bookingReference?: string;
+    type?: "hotel" | "hostel" | "airbnb" | "camping" | "other";
+    urlToBooking: string;
+    contact?: string;
+    notes?: string;
+  }
   participants: {
     userId: string;
     name: string;
@@ -40,6 +58,25 @@ const defaultTrip: TripFormState = {
     city: '',
     country: ''
   },
+  accomodation: {
+    _id: '',
+    name: '',
+    address: '',
+    checkIn: {
+      date: '',
+      time: '',
+    },
+    checkOut: {
+      date: '',
+      time: '',
+    },
+    bookingReference: '',
+    type: "hotel",
+    urlToBooking: '',
+    contact: '',
+    notes: '',
+  },
+
   participants: [],
   createdBy: {
     userId: '',
@@ -156,7 +193,7 @@ const TripForm: React.FC = () => {
         />
         <input
           className="input input-bordered w-full"
-          placeholder="Trip Cover Image"
+          placeholder="Trip Cover Image URL"
           value={trip.coverImageUrl}
           onChange={e => handleChange(['coverImageUrl'], e.target.value)}
         />
@@ -189,6 +226,79 @@ const TripForm: React.FC = () => {
             placeholder="Country"
             value={trip.destination.country}
             onChange={e => handleChange(['destination', 'country'], e.target.value)}
+          />
+        </div>
+
+        <div className="bg-base-200 p-4 rounded-lg">
+          <h3 className="text-lg font-semibold">Accomodation</h3>
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Accomodation Name"
+            value={trip.accomodation.name}
+            onChange={e => handleChange(['accomodation', 'name'], e.target.value)}
+          />
+
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Accomodation Address"
+            value={trip.accomodation.address}
+            onChange={e => handleChange(['accomodation', 'address'], e.target.value)}
+          />
+          <h5 className="text-sm font-semibold">Check In and Out Date and Time</h5>
+          <div className="grid grid-cols-2 gap-4">
+
+            <input
+              className="input input-bordered w-full my-1"
+              type='date'
+              placeholder="Accomodation CheckIn date"
+              value={trip.accomodation.checkIn.date}
+              onChange={e => handleChange(['accomodation', 'checkIn', 'date'], e.target.value)}
+            />
+            <input
+              className="input input-bordered w-full my-1"
+              type='time'
+              placeholder="Accomodation CheckIn Time"
+              value={trip.accomodation.checkIn.time}
+              onChange={e => handleChange(['accomodation', 'checkIn', 'time'], e.target.value)}
+            />
+            <input
+              className="input input-bordered w-full my-1"
+              type='date'
+              placeholder="Accomodation CheckOut date"
+              value={trip.accomodation.checkOut.date}
+              onChange={e => handleChange(['accomodation', 'checkOut', 'date'], e.target.value)}
+            />
+            <input
+              className="input input-bordered w-full my-1"
+              type='time'
+              placeholder="Accomodation CheckOut Time"
+              value={trip.accomodation.checkOut.time}
+              onChange={e => handleChange(['accomodation', 'checkOut', 'time'], e.target.value)}
+            />
+          </div>
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Accomodation Address"
+            value={trip.accomodation.type}
+            onChange={e => handleChange(['accomodation', 'address'], e.target.value)}
+          />
+           <input
+            className="input input-bordered w-full my-1"
+            placeholder="Notes"
+            value={trip.accomodation.notes}
+            onChange={e => handleChange(['accomodation', 'notes'], e.target.value)}
+          />
+           <input
+            className="input input-bordered w-full my-1"
+            placeholder="Contact"
+            value={trip.accomodation.contact}
+            onChange={e => handleChange(['accomodation', 'contact'], e.target.value)}
+          />
+                    <input
+            className="input input-bordered w-full my-1"
+            placeholder="Link to the booking"
+            value={trip.accomodation.urlToBooking}
+            onChange={e => handleChange(['accomodation', 'urlToBooking'], e.target.value)}
           />
         </div>
 

@@ -3,7 +3,7 @@ export interface UserProps {
   name?: string;
   email: string;
   password: string;
-  image?:string;
+  image?: string;
   trips?: any;
 }
 
@@ -20,17 +20,35 @@ export interface TripsState {
 }
 
 export interface AlertProps {
-  alertMessage:string,
-  alertType:TypeAlertProps,
-  alertPosition:string
+  alertMessage: string;
+  alertType: TypeAlertProps;
+  alertPosition: string;
 }
 
-export type TypeAlertProps = 'alert-warning' | 'alert-info' | 'alert-error';
-
+export type TypeAlertProps = "alert-warning" | "alert-info" | "alert-error";
 
 interface Destination {
   city?: string;
   country?: string;
+}
+
+interface Accommodation {
+  _id: string;
+  name: string;
+  address: string;
+  checkIn: {
+    date: Date;
+    time: TimeRanges;
+  };
+  checkOut: {
+    date: Date;
+    time: TimeRanges;
+  };
+  bookingReference?: string;
+  type?: "hotel" | "hostel" | "airbnb" | "camping" | "other";
+  urlToBooking: string;
+  contact?: string;
+  notes?: string;
 }
 
 interface Participant {
@@ -38,25 +56,26 @@ interface Participant {
   name: string;
   email?: string;
   avatarUrl?: string;
-  role: 'admin' | 'member' | 'viewer';
-  status: 'invited' | 'joined' | 'declined';
+  role: "admin" | "member" | "viewer";
+  status: "invited" | "joined" | "declined";
 }
 
 export interface TripProps extends Document {
-  _id:string;
+  _id: string;
   title: string;
   description?: string;
   startDateTrip: string;
   endDateTrip: string;
   destination: Destination;
   participants: Participant[];
+  accomodation: Accommodation;
   createdBy: {
     userId: string;
     name: string;
     email?: string;
   };
   isPublic: boolean;
-  status: 'planned' | 'ongoing' | 'completed' | 'cancelled';
+  status: "planned" | "ongoing" | "completed" | "cancelled";
   coverImageUrl?: string;
   galleryUrls?: string[];
   tags?: string[];

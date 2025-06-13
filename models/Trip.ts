@@ -1,18 +1,39 @@
-import { TripProps } from '@/interfaces/interfaces';
-import mongoose, { Schema } from 'mongoose';
+import { TripProps } from "@/interfaces/interfaces";
+import mongoose, { Schema } from "mongoose";
 
 const TripSchema = new Schema<TripProps>(
   {
-    title: { type: String, required: true, minlength:4 },
-    description:{ type: String, maxlength:100 },
+    title: { type: String, required: true, minlength: 4 },
+    description: { type: String, required: true, maxlength: 100 },
     startDateTrip: { type: String, required: true },
     endDateTrip: { type: String, required: true },
 
     destination: {
-      city:  { type: String, required: true },
-      country:  { type: String, required: true },
+      city: { type: String, required: true },
+      country: { type: String, required: true },
     },
 
+    accomodation: {
+      name: String,
+      address: String,
+      checkIn: {
+        date: String,
+        time: String,
+      },
+      checkOut: {
+        date: String,
+        time: String,
+      },
+      bookingReference: String,
+      type: {
+        type: String,
+        enum: ["hotel", "hostel", "airbnb", "camping", "other"],
+        default: "hotel",
+      },
+      urlToBooking: String,
+      contact: String,
+      notes: { type: String, required: true, maxlength: 100 },
+    },
 
     participants: [
       {
@@ -30,7 +51,11 @@ const TripSchema = new Schema<TripProps>(
     },
 
     isPublic: { type: Boolean, default: false },
-    status: { type: String, enum: ['planned', 'ongoing', 'completed', 'cancelled'], default: 'planned' },
+    status: {
+      type: String,
+      enum: ["planned", "ongoing", "completed", "cancelled"],
+      default: "planned",
+    },
     coverImageUrl: String,
     galleryUrls: [String],
     tags: [String],
@@ -39,6 +64,6 @@ const TripSchema = new Schema<TripProps>(
   { timestamps: true }
 );
 
-const Trip = mongoose.models.Trip || mongoose.model('Trip', TripSchema);
+const Trip = mongoose.models.Trip || mongoose.model("Trip", TripSchema);
 
 export default Trip;

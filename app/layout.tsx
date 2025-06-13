@@ -1,8 +1,5 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import './globals.css'
-import connectDB from '@/config/database';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Providers from './providers';
 import NavBar from '@/components/NavBar';
 
