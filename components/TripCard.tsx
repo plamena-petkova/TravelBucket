@@ -1,4 +1,6 @@
 import { TripProps } from '@/interfaces/interfaces';
+import { useRouter } from 'next/navigation';
+
 import React from 'react';
 
 interface TripCardProps {
@@ -7,9 +9,14 @@ interface TripCardProps {
 
 
 const TripCard = ({ trip }: TripCardProps) => {
+    const router = useRouter();
 
     const handleClick = () => {
-        console.log('ClickTrip', trip)
+        console.log('ClickTrip', trip);
+        if (trip) {
+            router.push(`/trips/${trip._id}`);
+        }
+
     }
 
     return (
