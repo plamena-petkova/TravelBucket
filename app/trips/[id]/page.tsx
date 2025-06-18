@@ -3,20 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { fetchTrip } from '@/services/tripService';
+import { TripProps } from '@/interfaces/interfaces';
 
-type Trip = {
-  _id: string;
-  title: string;
-  description: string;
-  startDateTrip: string;
-  endDateTrip: string;
-  destination: { city: string; country: string };
-  coverImageUrl: string;
-};
 
 const TripPage = () => {
   const params = useParams();
-  const [trip, setTrip] = useState<Trip | null>(null);
+  const [trip, setTrip] = useState<TripProps | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,22 +38,27 @@ const TripPage = () => {
   if (!trip) return <div>Trip not found.</div>;
 
   return (
-    <div>
-      <h1>{trip.title}</h1>
-      <p>{trip.description}</p>
-      <p>
-        {trip.destination.city}, {trip.destination.country}
-      </p>
-      <p>
-        From {trip.startDateTrip} to {trip.endDateTrip}
-      </p>
-      {trip.coverImageUrl && (
-        <img
-          src={trip.coverImageUrl}
-          alt={`Cover for ${trip.title}`}
-          style={{ width: '400px', height: 'auto' }}
-        />
-      )}
+    <div className="">
+      <div className="flex carousel w-full items-center">
+        <div id={trip._id} className="carousel-item w-full h-36">
+          <img
+            src={trip.coverImageUrl}
+            className="w-full object-cover" />
+        </div>
+      </div>
+      <div className="flex w-full justify-center gap-2 py-2">
+        <a href={trip._id} className="btn btn-xs">1</a>
+      </div>
+      <div className="flex flex-col items-center">
+        <h1>{trip.title}</h1>
+        <p>{trip.description}</p>
+        <p>From {trip.startDateTrip} to {trip.endDateTrip}</p>
+        <h2>{trip?.destination?.city}</h2>
+        <p>{trip?.destination?.country}</p>
+        <h2>Accomodation</h2>
+        <p>{trip?.accomodation?.type}</p>
+      </div>
+  
     </div>
   );
 };

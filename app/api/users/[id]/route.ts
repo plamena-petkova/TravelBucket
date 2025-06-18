@@ -4,7 +4,7 @@ import User from '@/models/User';
 import connectDB from '@/config/database';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     await connectDB();

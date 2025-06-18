@@ -8,10 +8,10 @@ export async function GET(
 ) {
   await connectDB();
 
-  try {
-    const trip = await Trip.findById(params.id).lean();
+  const {id} = await params;
 
-    console.log('trip', trip);
+  try {
+    const trip = await Trip.findById(id).lean();
 
     if (!trip) {
       return NextResponse.json({ message: 'Trip not found' }, { status: 404 });
