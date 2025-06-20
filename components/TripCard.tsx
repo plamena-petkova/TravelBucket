@@ -19,7 +19,7 @@ const TripCard = ({ trip }: TripCardProps) => {
 
     }
 
-    return (
+return (
         <div className='m-3 p-3'>
             <div
                 onClick={handleClick}
