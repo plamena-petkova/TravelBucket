@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const NavBar = () => {
-    const { clearUser } = useUserStore();
+    const clearUser = useUserStore((state) => state.clearUser);
     const user = useUserStore((state) => state.user);
     const router = useRouter();
 
@@ -37,10 +37,10 @@ const NavBar = () => {
                 <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
                 <div className="dropdown dropdown-end">
                     {user && <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                        {user?.image ? <div className="w-10 rounded-full">
+                        {user?.avatarUrl ? <div className="w-10 rounded-full">
                             <img
                                 alt="Tailwind CSS Navbar component"
-                                src={user.image} /></div> : <div className="avatar avatar-placeholder">
+                                src={user.avatarUrl} /></div> : <div className="avatar avatar-placeholder">
                             <div className=" w-9 rounded-full bg-neutral text-neutral-content">
                                 <span>{user?.name?.charAt(0).toUpperCase()}</span>
                             </div>

@@ -32,7 +32,7 @@ const TripSchema = new Schema<TripProps>(
       },
       urlToBooking: String,
       contact: String,
-      notes: { type: String, required: true, maxlength: 100 },
+      notes: { type: String, maxlength: 100 },
     },
 
     participants: [

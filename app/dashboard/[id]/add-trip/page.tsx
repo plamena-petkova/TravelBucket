@@ -1,5 +1,7 @@
 'use client'
 import AlertComponent from '@/components/AlertComponent';
+import Autocomplete from '@/components/AutoComplete';
+import { Participant } from '@/interfaces/interfaces';
 import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -31,17 +33,8 @@ type TripFormState = {
     contact?: string;
     notes?: string;
   }
-  participants: {
-    userId: string;
-    name: string;
-    email?: string;
-    avatarUrl?: string;
-  }[];
-  createdBy: {
-    userId: string;
-    name: string;
-    email?: string;
-  };
+  participants: Participant[];
+  createdBy: Participant,
   isPublic: boolean;
   status: 'planned' | 'ongoing' | 'completed' | 'cancelled';
   coverImageUrl?: string;
@@ -82,6 +75,7 @@ const defaultTrip: TripFormState = {
     userId: '',
     name: '',
     email: '',
+    avatarUrl: '',
   },
   isPublic: false,
   status: 'planned',
@@ -96,6 +90,7 @@ const TripForm: React.FC = () => {
 
 
   const user = useUserStore((state) => state.user);
+  const users = useUserStore((state) => state.users);
 
   const [trip, setTrip] = useState<TripFormState>(defaultTrip);
 
@@ -140,6 +135,8 @@ const TripForm: React.FC = () => {
     if (user) {
       trip.createdBy.userId = user._id;
       trip.createdBy.email = user.email;
+      trip.createdBy.name = user.name || '';
+      trip.createdBy.avatarUrl = user.avatarUrl;
     }
 
     try {
@@ -155,7 +152,7 @@ const TripForm: React.FC = () => {
       if (res.ok) {
         console.log('Trip created with ID:', data.tripId);
         setErrorMessage('');
-        // Optionally redirect or show success UI
+
       } else {
         console.error('Error creating trip:', data.message);
         setErrorMessage(data.error.errors.title.message)
@@ -282,24 +279,40 @@ const TripForm: React.FC = () => {
             value={trip.accomodation.type}
             onChange={e => handleChange(['accomodation', 'address'], e.target.value)}
           />
-           <input
+          <input
             className="input input-bordered w-full my-1"
             placeholder="Notes"
             value={trip.accomodation.notes}
             onChange={e => handleChange(['accomodation', 'notes'], e.target.value)}
           />
-           <input
+          <input
             className="input input-bordered w-full my-1"
             placeholder="Contact"
             value={trip.accomodation.contact}
             onChange={e => handleChange(['accomodation', 'contact'], e.target.value)}
           />
-                    <input
+          <input
             className="input input-bordered w-full my-1"
             placeholder="Link to the booking"
             value={trip.accomodation.urlToBooking}
             onChange={e => handleChange(['accomodation', 'urlToBooking'], e.target.value)}
           />
+        </div>
+        <div className="">
+
+          <Autocomplete
+            suggestions={users}
+            placeholder="Choose a user"
+            onChange={(selectedUsers) =>
+              handleChange(['participants'], selectedUsers.map((u) => ({
+                userId: u._id,
+                name: u.name || '',
+                email: u.email,
+                avatarUrl: u.avatarUrl,
+              })))
+            }
+          />
+
         </div>
 
         <button type="submit" className="btn btn-primary w-full">

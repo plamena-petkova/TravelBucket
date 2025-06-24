@@ -1,21 +1,34 @@
 'use client'
-import { UserProps } from '@/interfaces/interfaces';
-import React, { useState } from 'react';
+import { TripProps, UserProps } from '@/interfaces/interfaces';
+import React, { useEffect, useState } from 'react';
 import TripCard from './TripCard';
 import { useTripsStore } from '@/stores/userStore';
 
 
 function Drawer(user: UserProps) {
 
-    const trips = useTripsStore((state) => state.trips);
+    const allTrips = useTripsStore((state) => state.trips);
 
-    const [menu, setMenu] = useState<string>('dashboard')
+    const [menu, setMenu] = useState<string>('dashboard');
+    const [tripsByUser, setTripsByUser] = useState<TripProps[]>();
 
 
     const handleSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         setMenu(event.currentTarget.name)
         console.log('Button clicked:', event.currentTarget.textContent);
     }
+
+
+    useEffect(() => {
+        if (allTrips && user?._id) {
+            const userTrips = allTrips.filter(
+                (trip) => trip.createdBy?.userId === user._id
+            );
+            setTripsByUser(userTrips);
+        }
+    }, [allTrips, user]);
+
+    console.log('Trips', tripsByUser);
 
     return (
         <div>
@@ -53,9 +66,17 @@ function Drawer(user: UserProps) {
                     <p>Email: {user.email}</p>
                 </div>}
 
-                {menu === 'trips' && <div className='flex justify-center flex-wrap'>{trips?.map((trip) => {
-                    return <TripCard key={trip._id} trip={trip} />
-                })}</div>}
+                {menu === 'trips' && (
+                    <div className="flex justify-center flex-wrap w-full p-4">
+                        {tripsByUser && tripsByUser.length > 0 ? (
+                            tripsByUser.map((trip) => <TripCard key={trip._id} trip={trip} />)
+                        ) : (
+                            <p className="text-center text-lg text-gray-500 mt-10">
+                                ✈️ You don't have any trips yet. Click "➕ Add Trip" to create one!
+                            </p>
+                        )}
+                    </div>
+                )}
 
             </div>
 

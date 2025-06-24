@@ -14,8 +14,8 @@ export default function Register() {
     const { setUser } = useUserStore();
 
     const [form, setForm] = useState<string>('register');
-    const [registerValues, setRegisterValues] = useState<UserProps>({ _id: '', name: '', email: '', password: '' })
-    const [loginValues, setLoginValues] = useState<UserProps>({ _id: '', email: '', password: '' })
+    const [registerValues, setRegisterValues] = useState<UserProps>({ _id: '', name: '', email: '', password: '', avatarUrl:'' })
+    const [loginValues, setLoginValues] = useState<UserProps>({ _id: '', email: '', password: '', avatarUrl:'' })
     const [error, setError] = useState<string | null>(null);
 
     const handleForm = (formName: string) => {
@@ -37,6 +37,8 @@ export default function Register() {
             [name]: value,
         }));
     }
+
+    console.log('RegisterValues', registerValues)
 
     const handleRegisterSubmit = async () => {
         try {
@@ -138,6 +140,11 @@ export default function Register() {
                                 <legend className="fieldset-legend">Password</legend>
                                 <input onChange={(e) => handleRegisterValues(e)} name="password" type="text" className="input" placeholder="Type here" />
                             </fieldset>
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend">Avatar</legend>
+                               <input onChange={(e) => handleRegisterValues(e)} name="avatarUrl" type="url" className="input" placeholder="Type here" />
+                            </fieldset>
+                           
                             <button type="submit" onClick={handleRegisterSubmit} className="btn btn-primary m-2">Register</button></>}
 
                         {form === 'login' && <><h2 className="card-title">Login Form</h2>

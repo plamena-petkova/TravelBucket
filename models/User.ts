@@ -19,7 +19,7 @@ const UserSchema = new Schema(
       max:20,
       unique: true,
     },
-    image: {
+    avatarUrl: {
       type: String,
     },
     trips: [

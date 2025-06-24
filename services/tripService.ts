@@ -6,3 +6,9 @@ export async function fetchTrip(id: string) {
   }
   return res.json();
 }
+
+  export const fetchTrips= async () => {
+    const res = await fetch('/api/trips');
+    if (!res.ok) throw new Error('Failed to fetch trips');
+    return res.json();
+  };

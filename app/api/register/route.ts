@@ -4,7 +4,7 @@ import * as bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
 try {
-  const { name, email, password } = await request.json();
+  const { name, email, password, avatarUrl } = await request.json();
 
   if (!email || !name || !password) {
     return new NextResponse("Missing email, name or password", { status: 400 });
@@ -16,7 +16,7 @@ try {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ name, email, password: hashedPassword });
+  const newUser = new User({ name, email, password: hashedPassword, avatarUrl });
   await newUser.save();
 
   return NextResponse.json({ message: "success" });

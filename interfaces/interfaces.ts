@@ -2,8 +2,8 @@ export interface UserProps {
   _id: string;
   name?: string;
   email: string;
+  avatarUrl:string;
   password: string;
-  image?: string;
   trips?: any;
 }
 
@@ -51,13 +51,11 @@ interface Accommodation {
   notes?: string;
 }
 
-interface Participant {
+export interface Participant {
   userId: string;
   name: string;
   email?: string;
   avatarUrl?: string;
-  role: "admin" | "member" | "viewer";
-  status: "invited" | "joined" | "declined";
 }
 
 export interface TripProps extends Document {
