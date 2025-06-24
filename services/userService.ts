@@ -11,3 +11,19 @@ export const fetchUsers = async () => {
   if (!res.ok) throw new Error("Failed to fetch user");
   return res.json();
 };
+
+
+export const fetchUserById = async (id: string) => {
+  const isServer = typeof window === 'undefined';
+  const baseUrl = isServer ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000' : '';
+
+  const res = await fetch(`${baseUrl}/api/user/${id}`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch user');
+  }
+
+  return res.json();
+};

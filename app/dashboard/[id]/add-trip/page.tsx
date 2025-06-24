@@ -109,6 +109,7 @@ const TripForm: React.FC = () => {
   };
 
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -150,8 +151,8 @@ const TripForm: React.FC = () => {
 
       const data = await res.json();
       if (res.ok) {
-        console.log('Trip created with ID:', data.tripId);
         setErrorMessage('');
+        router.push('/dashboard')
 
       } else {
         console.error('Error creating trip:', data.message);
@@ -304,11 +305,11 @@ const TripForm: React.FC = () => {
             suggestions={users}
             placeholder="Choose a user"
             onChange={(selectedUsers) =>
-              handleChange(['participants'], selectedUsers.map((u) => ({
-                userId: u._id,
-                name: u.name || '',
-                email: u.email,
-                avatarUrl: u.avatarUrl,
+              handleChange(['participants'], selectedUsers.map((user) => ({
+                userId: user._id,
+                name: user.name || '',
+                email: user.email,
+                avatarUrl: user.avatarUrl,
               })))
             }
           />
