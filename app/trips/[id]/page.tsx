@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { fetchTrip } from '@/services/tripService';
 import { TripProps } from '@/interfaces/interfaces';
-import { useTripsStore } from '@/stores/userStore';
+import { useTripsStore } from '@/stores/tripStore';
 import Link from 'next/link';
 
 const TripPage = () => {

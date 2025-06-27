@@ -3,7 +3,8 @@
 import { TripProps, UserProps } from '@/interfaces/interfaces';
 import { fetchTrips } from '@/services/tripService';
 import { fetchUser, fetchUsers } from '@/services/userService';
-import { useTripsStore, useUserStore } from '@/stores/userStore';
+import { useTripsStore } from '@/stores/tripStore';
+import {  useUserStore } from '@/stores/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 

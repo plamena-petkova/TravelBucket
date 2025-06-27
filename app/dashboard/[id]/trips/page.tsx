@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTripsStore } from '@/stores/userStore';
+import { useTripsStore } from '@/stores/tripStore';
 import { useParams } from 'next/navigation';
 import TripCard from '@/components/TripCard';
 import { TripProps } from '@/interfaces/interfaces';
@@ -22,7 +22,7 @@ export default function TripsPage() {
     loadTrips();
   }, [setTrips]);
 
-  
+
   useEffect(() => {
     if (allTrips && id) {
       const filtered = allTrips.filter((trip) => trip.createdBy?.userId === id);
