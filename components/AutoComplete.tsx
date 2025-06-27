@@ -15,19 +15,23 @@ export default function MultiUserAutocomplete({
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] = useState<UserProps[]>([]);
   const [selected, setSelected] = useState<UserProps[]>([]);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
+  const filterSuggestions = (value: string) => {
+    return suggestions.filter(
+      (user) =>
+        user.email.toLowerCase().includes(value.toLowerCase()) &&
+        !selected.find((s) => s._id === user._id)
+    );
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
 
-    setFiltered(
-      suggestions
-        .filter(
-          (user) =>
-            user.email.toLowerCase().includes(value.toLowerCase()) &&
-            !selected.find((s) => s._id === user._id)
-        )
-    );
+    const filteredUsers = filterSuggestions(value);
+    setFiltered(filteredUsers);
+    setShowDropdown(filteredUsers.length > 0);
   };
 
   const handleSelect = (user: UserProps) => {
@@ -35,6 +39,7 @@ export default function MultiUserAutocomplete({
     setSelected(updated);
     setQuery("");
     setFiltered([]);
+    setShowDropdown(false);
     onChange?.(updated);
   };
 
@@ -42,6 +47,15 @@ export default function MultiUserAutocomplete({
     const updated = selected.filter((u) => u._id !== userId);
     setSelected(updated);
     onChange?.(updated);
+  };
+
+  const handleToggleDropdown = () => {
+    const unselectedUsers = suggestions.filter(
+      (user) => !selected.find((s) => s._id === user._id)
+    );
+    setFiltered(unselectedUsers);
+    setShowDropdown(!showDropdown);
+    setQuery("");
   };
 
   return (
@@ -52,10 +66,18 @@ export default function MultiUserAutocomplete({
           value={query}
           onChange={handleChange}
           placeholder={placeholder}
-          className="input input-bordered w-full"
+          className="input input-bordered w-full pr-10"
         />
-        {filtered.length > 0 && (
-          <ul className="absolute z-10 mt-1 w-full bg-base-100 border border-base-300 rounded-box shadow dropdown-content">
+        <button
+          type="button"
+          onClick={handleToggleDropdown}
+          className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 hover:text-black"
+        >
+          ▼
+        </button>
+
+        {showDropdown && filtered.length > 0 && (
+          <ul className="menu-dropdown absolute z-10 mt-1 w-full bg-base-100 border border-base-300 rounded-box shadow">
             {filtered.map((user) => (
               <li
                 key={user._id}
@@ -73,10 +95,7 @@ export default function MultiUserAutocomplete({
       {selected.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2">
           {selected.map((user) => (
-            <div
-              key={user._id}
-              className="badge badge-neutral gap-1 px-3 py-2"
-            >
+            <div key={user._id} className="badge badge-neutral gap-1 px-3 py-2">
               {user.name}
               <button
                 onClick={() => handleRemove(user._id)}

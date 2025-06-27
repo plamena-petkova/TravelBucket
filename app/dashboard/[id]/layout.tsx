@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   if (!user) return <div>User not found</div>;
 
   return (
-    <div className="lg:flex lg:h-screen md:flex gap-4 sm:flex-row m-3">
+    <div className="lg:flex lg:h-screen md:flex md:h-screen gap-4 sm:flex-row m-3">
       <Drawer user={user} />
       <div className="p-3">{children}</div>
     </div>

@@ -164,14 +164,8 @@ const TripForm: React.FC = () => {
     }
   };
 
-  const handleBackClick = () => {
-    router.back();
-  }
-
-
   return (
     <div>
-      <button className="btn m-3 p-4" onClick={handleBackClick}>Back to dashboard</button>
       <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 space-y-6">
 
         <h2 className="text-2xl font-bold">Create Trip</h2>
@@ -303,7 +297,6 @@ const TripForm: React.FC = () => {
 
           <Autocomplete
             suggestions={users}
-            placeholder="Choose a user"
             onChange={(selectedUsers) =>
               handleChange(['participants'], selectedUsers.map((user) => ({
                 userId: user._id,
