@@ -14,9 +14,10 @@ export interface UserState {
 }
 
 export interface TripsState {
-  trips: TripProps[] | null;
+  trips: TripProps[] | [];
   setTrips: (trips: TripProps[]) => void;
   clearTrips: () => void;
+  addTrip: (trip: TripProps) => void;
 }
 
 export interface AlertProps {
@@ -81,3 +82,40 @@ export interface TripProps extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export type TripFormState = {
+  title: string;
+  description?: string;
+  startDateTrip: string;
+  endDateTrip: string;
+  destination: {
+    city?: string;
+    country?: string;
+  };
+  accomodation: {
+    _id: string;
+    name: string;
+    address: string;
+    checkIn: {
+      date: string;
+      time: string;
+    };
+    checkOut: {
+      date: string;
+      time: string;
+    };
+    bookingReference?: string;
+    type?: "hotel" | "hostel" | "airbnb" | "camping" | "other";
+    urlToBooking: string;
+    contact?: string;
+    notes?: string;
+  }
+  participants: Participant[];
+  createdBy: Participant,
+  isPublic: boolean;
+  status: 'planned' | 'ongoing' | 'completed' | 'cancelled';
+  coverImageUrl?: string;
+  galleryUrls?: string[];
+  tags?: string[];
+};

@@ -1,46 +1,14 @@
 'use client'
 import AlertComponent from '@/components/AlertComponent';
 import Autocomplete from '@/components/AutoComplete';
-import { Participant } from '@/interfaces/interfaces';
-import { useUserStore } from '@/stores/userStore';
+import { TripFormState } from '@/interfaces/interfaces';
+import { createTrip } from '@/services/tripService';
+import { useTripsStore, useUserStore } from '@/stores/userStore';
+import { validateTripDates } from '@/utils/tripValidationDates';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-type TripFormState = {
-  title: string;
-  description?: string;
-  startDateTrip: string;
-  endDateTrip: string;
-  destination: {
-    city?: string;
-    country?: string;
-  };
-  accomodation: {
-    _id: string;
-    name: string;
-    address: string;
-    checkIn: {
-      date: string;
-      time: string;
-    };
-    checkOut: {
-      date: string;
-      time: string;
-    };
-    bookingReference?: string;
-    type?: "hotel" | "hostel" | "airbnb" | "camping" | "other";
-    urlToBooking: string;
-    contact?: string;
-    notes?: string;
-  }
-  participants: Participant[];
-  createdBy: Participant,
-  isPublic: boolean;
-  status: 'planned' | 'ongoing' | 'completed' | 'cancelled';
-  coverImageUrl?: string;
-  galleryUrls?: string[];
-  tags?: string[];
-};
+
 
 const defaultTrip: TripFormState = {
   title: '',
@@ -88,6 +56,8 @@ const TripForm: React.FC = () => {
 
   const router = useRouter();
 
+  const {addTrip} = useTripsStore();
+
 
   const user = useUserStore((state) => state.user);
   const users = useUserStore((state) => state.users);
@@ -113,23 +83,9 @@ const TripForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const today = new Date();
-    const startDate = new Date(trip.startDateTrip);
-    const endDate = new Date(trip.endDateTrip);
-
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      setErrorMessage('Please enter valid start and end dates.');
-      return;
-    }
-
-    if (startDate <= today) {
-      setErrorMessage('Start date must be after today.')
-      return;
-
-    }
-
-    if (endDate <= startDate) {
-      setErrorMessage('End date must be after start date.')
+    const validationMessage = validateTripDates(trip.startDateTrip, trip.endDateTrip);
+    if (validationMessage) {
+      setErrorMessage(validationMessage);
       return;
     }
 
@@ -140,27 +96,14 @@ const TripForm: React.FC = () => {
       trip.createdBy.avatarUrl = user.avatarUrl;
     }
 
-    try {
-      const res = await fetch('/api/trips', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(trip),
-      });
+    const response = await createTrip(trip);
 
-      const data = await res.json();
-      if (res.ok) {
-        setErrorMessage('');
-        router.push('/dashboard')
-
-      } else {
-        console.error('Error creating trip:', data.message);
-        setErrorMessage(data.error.errors.title.message)
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-      setErrorMessage('Network error')
+    if (response.success) {
+      setErrorMessage('');
+      addTrip(response.data)
+      router.push(`/dashboard/${user?._id}/trips`);
+    } else {
+      setErrorMessage(response.error || 'Something went wrong');
     }
   };
 
@@ -170,43 +113,46 @@ const TripForm: React.FC = () => {
 
         <h2 className="text-2xl font-bold">Create Trip</h2>
         {errorMessage !== '' && <AlertComponent alertType='alert-error' alertMessage={errorMessage} alertPosition='middle' />}
-        <input
-          className="input input-bordered w-full"
-          placeholder="Trip Title"
-          value={trip.title}
-          onChange={e => handleChange(['title'], e.target.value)}
-        />
-
-        <textarea
-          className="textarea textarea-bordered w-full"
-          placeholder="Description"
-          value={trip.description}
-          onChange={e => handleChange(['description'], e.target.value)}
-        />
-        <input
-          className="input input-bordered w-full"
-          placeholder="Trip Cover Image URL"
-          value={trip.coverImageUrl}
-          onChange={e => handleChange(['coverImageUrl'], e.target.value)}
-        />
-
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="date"
-            className="input input-bordered"
-            value={trip.startDateTrip}
-            onChange={e => handleChange(['startDateTrip'], e.target.value)}
-          />
-          <input
-            type="date"
-            className="input input-bordered"
-            value={trip.endDateTrip}
-            onChange={e => handleChange(['endDateTrip'], e.target.value)}
-          />
-        </div>
-
         <div className="bg-base-200 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold">Destination</h3>
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Trip Title"
+            value={trip.title}
+            onChange={e => handleChange(['title'], e.target.value)}
+          />
+
+          <textarea
+            className="textarea textarea-bordered w-full my-1"
+            placeholder="Description"
+            value={trip.description}
+            onChange={e => handleChange(['description'], e.target.value)}
+          />
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Trip Cover Image URL"
+            value={trip.coverImageUrl}
+            onChange={e => handleChange(['coverImageUrl'], e.target.value)}
+          />
+
+          <h3 className="text-md font-semibold my-1">Period of the trip</h3>
+          <div className="flex justify-between gap-4 my-1">
+
+            <input
+              type="date"
+              className="input input-bordered"
+              value={trip.startDateTrip}
+              onChange={e => handleChange(['startDateTrip'], e.target.value)}
+            />
+            <input
+              type="date"
+              className="input input-bordered"
+              value={trip.endDateTrip}
+              onChange={e => handleChange(['endDateTrip'], e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="bg-base-200 p-4 rounded-lg">
+          <h3 className="text-md font-semibold">Destination of the trip</h3>
           <input
             className="input input-bordered w-full my-1"
             placeholder="City"
@@ -222,7 +168,7 @@ const TripForm: React.FC = () => {
         </div>
 
         <div className="bg-base-200 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold">Accomodation</h3>
+          <h3 className="text-md font-semibold">Accomodation</h3>
           <input
             className="input input-bordered w-full my-1"
             placeholder="Accomodation Name"
@@ -236,7 +182,19 @@ const TripForm: React.FC = () => {
             value={trip.accomodation.address}
             onChange={e => handleChange(['accomodation', 'address'], e.target.value)}
           />
-          <h5 className="text-sm font-semibold">Check In and Out Date and Time</h5>
+          <select
+            className="select select-bordered w-full my-1"
+            value={trip.accomodation.type}
+            onChange={e => handleChange(['accomodation', 'type'], e.target.value)}
+          >
+            <option value="">Select Accommodation Type</option>
+            <option value="hotel">Hotel</option>
+            <option value="hostel">Hostel</option>
+            <option value="airbnb">Airbnb</option>
+            <option value="camping">Camping</option>
+            <option value="other">Other</option>
+          </select>
+          <h5 className="text-md font-semibold my-1">Check In and Out Date and Time</h5>
           <div className="grid grid-cols-2 gap-4">
 
             <input
@@ -268,12 +226,7 @@ const TripForm: React.FC = () => {
               onChange={e => handleChange(['accomodation', 'checkOut', 'time'], e.target.value)}
             />
           </div>
-          <input
-            className="input input-bordered w-full my-1"
-            placeholder="Accomodation Address"
-            value={trip.accomodation.type}
-            onChange={e => handleChange(['accomodation', 'address'], e.target.value)}
-          />
+
           <input
             className="input input-bordered w-full my-1"
             placeholder="Notes"

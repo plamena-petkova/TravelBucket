@@ -5,18 +5,33 @@ import { useTripsStore } from '@/stores/userStore';
 import { useParams } from 'next/navigation';
 import TripCard from '@/components/TripCard';
 import { TripProps } from '@/interfaces/interfaces';
+import { fetchTrips } from '@/services/tripService';
 
 export default function TripsPage() {
   const { id } = useParams() as { id: string };
   const allTrips = useTripsStore((state) => state.trips);
+  const setTrips = useTripsStore((state) => state.setTrips);
   const [userTrips, setUserTrips] = useState<TripProps[]>([]);
 
+
+  useEffect(() => {
+    const loadTrips = async () => {
+      const data = await fetchTrips();
+      setTrips(data);
+    };
+    loadTrips();
+  }, [setTrips]);
+
+  
   useEffect(() => {
     if (allTrips && id) {
       const filtered = allTrips.filter((trip) => trip.createdBy?.userId === id);
       setUserTrips(filtered);
     }
   }, [allTrips, id]);
+
+
+
 
   return (
     <div>

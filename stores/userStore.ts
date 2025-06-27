@@ -18,7 +18,11 @@ export const useUserStore = create<UserStore>((set) => ({
 }));
 
 export const useTripsStore = create<TripsState>((set) => ({
-  trips: null,
+  trips: [],
   setTrips: (trips) => set({ trips }),
-  clearTrips: () => set({ trips: null }),
+  addTrip: (trip) =>
+    set((state) => ({
+      trips: [...state.trips, trip],
+    })),
+  clearTrips: () => set({ trips: [] }),
 }));
