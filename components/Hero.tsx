@@ -10,7 +10,7 @@ const Hero = () => {
 
     <div
       className="hero min-h-screen"
-      style={{ backgroundImage: "url('/assets/heroPicture.jpg')" }}>
+      style={{ backgroundImage: "url('/assets/Picture.jpg')" }}>
       <div className="hero-overlay"></div>
 
       <div className="hero-content text-neutral-content text-center">

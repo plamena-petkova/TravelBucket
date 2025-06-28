@@ -1,4 +1,5 @@
 import { TripProps } from '@/interfaces/interfaces';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import React from 'react';
@@ -19,7 +20,7 @@ const TripCard = ({ trip }: TripCardProps) => {
 
     }
 
-return (
+    return (
         <div className='m-3 p-3'>
             <div
                 onClick={handleClick}
@@ -49,11 +50,15 @@ return (
 
                 </div>
                 <figure className="w-96 h-52 overflow-hidden">
-                    <img
+                    {trip.coverImageUrl ? <img
                         src={trip.coverImageUrl}
                         alt={trip.coverImageUrl?.at(3)}
                         className="w-full h-full object-cover"
-                    />
+                    /> : <img
+                        src="/assets/genericTripPicture.jpg"
+                        className="w-full h-full object-cover"
+                        alt="Genric Photo"
+                    />}
                 </figure>
             </div>
 
