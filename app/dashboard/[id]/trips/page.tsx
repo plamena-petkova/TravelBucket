@@ -23,9 +23,14 @@ export default function TripsPage() {
   }, [setTrips]);
 
 
-  useEffect(() => {
+ useEffect(() => {
     if (allTrips && id) {
-      const filtered = allTrips.filter((trip) => trip.createdBy?.userId === id);
+      const filtered = allTrips.filter((trip) => {
+        const isCreator = trip.createdBy?.userId === id;
+        const isParticipant = trip.participants?.some(p => p.userId === id);
+        return isCreator || isParticipant;
+      });
+
       setUserTrips(filtered);
     }
   }, [allTrips, id]);

@@ -57,7 +57,7 @@ const TripForm: React.FC = () => {
 
   const router = useRouter();
 
-  const {addTrip} = useTripsStore();
+  const { addTrip } = useTripsStore();
 
 
   const user = useUserStore((state) => state.user);
@@ -195,7 +195,7 @@ const TripForm: React.FC = () => {
             <option value="camping">Camping</option>
             <option value="other">Other</option>
           </select>
-          <h5 className="text-md font-semibold my-1">Check In and Out Date and Time</h5>
+          <h5 className="text-sm font-semibold my-1">Check In Date and Time</h5>
           <div className="grid grid-cols-2 gap-4">
 
             <input
@@ -212,6 +212,10 @@ const TripForm: React.FC = () => {
               value={trip.accomodation.checkIn.time}
               onChange={e => handleChange(['accomodation', 'checkIn', 'time'], e.target.value)}
             />
+          </div>
+          <h5 className="text-sm font-semibold my-1">Check Out Date and Time</h5>
+          <div className="grid grid-cols-2 gap-4">
+
             <input
               className="input input-bordered w-full my-1"
               type='date'
@@ -245,6 +249,12 @@ const TripForm: React.FC = () => {
             placeholder="Link to the booking"
             value={trip.accomodation.urlToBooking}
             onChange={e => handleChange(['accomodation', 'urlToBooking'], e.target.value)}
+          />
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Booking reference"
+            value={trip.accomodation.bookingReference}
+            onChange={e => handleChange(['accomodation', 'bookingReference'], e.target.value)}
           />
         </div>
         <div className="">
