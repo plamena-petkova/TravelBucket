@@ -136,13 +136,10 @@ const TripForm: React.FC = () => {
             value={trip.description}
             onChange={e => handleChange(['description'], e.target.value)}
           />
-          <input
-            className="input input-bordered w-full my-1"
-            placeholder="Trip Cover Image URL"
-            value={trip.coverImageUrl}
-            onChange={e => handleChange(['coverImageUrl'], e.target.value)}
-          />
-
+          <input type="url" className="input validator input-bordered w-full my-1" placeholder="Trip Cover Image https://" value={trip.coverImageUrl}
+            pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$"
+            title="Must be valid URL" onChange={e => handleChange(['coverImageUrl'], e.target.value)} />
+          <p className="validator-hint">Must be valid URL</p>
           <h3 className="text-md font-semibold my-1">Period of the trip</h3>
           <div className="flex justify-between gap-4 my-1">
 
@@ -252,12 +249,11 @@ const TripForm: React.FC = () => {
             value={trip.accomodation.contact}
             onChange={e => handleChange(['accomodation', 'contact'], e.target.value)}
           />
-          <input
-            className="input input-bordered w-full my-1"
-            placeholder="Link to the booking"
-            value={trip.accomodation.urlToBooking}
-            onChange={e => handleChange(['accomodation', 'urlToBooking'], e.target.value)}
-          />
+          <input type="url" className="input validator input-bordered w-full my-1" placeholder="Link to the booking https://" value={trip.accomodation.urlToBooking}
+            pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$"
+            title="Must be valid URL" onChange={e => handleChange(['accomodation', 'urlToBooking'], e.target.value)} />
+          <p className="validator-hint">Must be valid URL</p>
+
           <input
             className="input input-bordered w-full my-1"
             placeholder="Booking reference"

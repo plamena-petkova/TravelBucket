@@ -92,7 +92,7 @@ const TripPage = () => {
             {!trip.transport ? <div>No Transport selected yet</div> :
               <div className="">
                 <p>{trip.transport?.typeOfTransport}</p>
-                <p>{trip.transport?.startDate} - {trip.transport?.endDate}</p>
+                <p>{trip.transport?.startPoint} - {trip.transport?.endPoint}</p>
                 <p>{trip.transport?.price}</p>
               </div>}
 
