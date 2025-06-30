@@ -42,11 +42,15 @@ const TripPage = () => {
     <div className="">
       <div className="flex carousel w-full items-center">
         <div id={trip._id} className="carousel-item w-full h-52">
-          <img
+          {trip.coverImageUrl ? <img
             src={trip.coverImageUrl}
-            className="w-full object-cover"
-            alt={trip.title}
-          />
+            alt={trip.coverImageUrl?.at(3)}
+            className="w-full h-full object-cover"
+          /> : <img
+            src="/assets/genericTripPicture.jpg"
+            className="w-full h-full object-cover"
+            alt="Genric Photo"
+          />}
         </div>
       </div>
       <div className="flex flex-col sm:flex-row justify-center items-center">
@@ -82,6 +86,16 @@ const TripPage = () => {
             <p>{trip.accomodation?.address}</p>
             <p>{trip.accomodation?.contact} - {trip.accomodation?.notes}</p>
             <Link className="link link-accent" href={trip.accomodation?.urlToBooking || ''} target='_blank'>Link to booking</Link>
+          </div>
+          <div className="p-4 mr-4">
+            <h2 className="text-xl">✈️ Transportation</h2>
+            {!trip.transport ? <div>No Transport selected yet</div> :
+              <div className="">
+                <p>{trip.transport?.typeOfTransport}</p>
+                <p>{trip.transport?.startDate} - {trip.transport?.endDate}</p>
+                <p>{trip.transport?.price}</p>
+              </div>}
+
           </div>
         </div>
       </div>

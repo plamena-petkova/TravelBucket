@@ -2,7 +2,7 @@ export interface UserProps {
   _id: string;
   name?: string;
   email: string;
-  avatarUrl:string;
+  avatarUrl: string;
   password: string;
   trips?: any;
 }
@@ -68,6 +68,12 @@ export interface TripProps extends Document {
   destination: Destination;
   participants: Participant[];
   accomodation: Accommodation;
+  transport: {
+    startPoint: string;
+    endPoint: string;
+    price: string;
+    typeOfTransport: "airplane" | "car" | "bus" | "train" | "other";
+  };
   createdBy: {
     userId: string;
     name: string;
@@ -82,7 +88,6 @@ export interface TripProps extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
-
 
 export type TripFormState = {
   title: string;
@@ -110,11 +115,17 @@ export type TripFormState = {
     urlToBooking: string;
     contact?: string;
     notes?: string;
-  }
+  };
+  transport: {
+    typeOfTransport: "airplane" | "car" | "bus" | "train" | "other";
+    startPoint: string;
+    endPoint: string;
+    price: string;
+  };
   participants: Participant[];
-  createdBy: Participant,
+  createdBy: Participant;
   isPublic: boolean;
-  status: 'planned' | 'ongoing' | 'completed' | 'cancelled';
+  status: "planned" | "ongoing" | "completed" | "cancelled";
   coverImageUrl?: string;
   galleryUrls?: string[];
   tags?: string[];

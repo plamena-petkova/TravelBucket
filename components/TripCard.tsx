@@ -1,5 +1,4 @@
 import { TripProps } from '@/interfaces/interfaces';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import React from 'react';
@@ -13,7 +12,6 @@ const TripCard = ({ trip }: TripCardProps) => {
     const router = useRouter();
 
     const handleClick = () => {
-        console.log('ClickTrip', trip);
         if (trip) {
             router.push(`/trips/${trip._id}`);
         }

@@ -34,6 +34,12 @@ const TripSchema = new Schema<TripProps>(
       contact: String,
       notes: { type: String, maxlength: 100 },
     },
+    transport: {
+      startPoint: { type: String },
+      endPoint: { type: String },
+      price: { type: String },
+      typeOfTransport: { type: String },
+    },
 
     participants: [
       {

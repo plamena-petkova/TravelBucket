@@ -38,7 +38,13 @@ const defaultTrip: TripFormState = {
     contact: '',
     notes: '',
   },
+  transport: {
+    typeOfTransport: 'airplane',
+    startPoint: '',
+    endPoint: '',
+    price: '',
 
+  },
   participants: [],
   createdBy: {
     userId: '',
@@ -107,6 +113,8 @@ const TripForm: React.FC = () => {
       setErrorMessage(response.error || 'Something went wrong');
     }
   };
+
+  console.log('Trip', trip);
 
   return (
     <div>
@@ -256,6 +264,39 @@ const TripForm: React.FC = () => {
             value={trip.accomodation.bookingReference}
             onChange={e => handleChange(['accomodation', 'bookingReference'], e.target.value)}
           />
+        </div>
+        <div className="">
+          <select
+            className="select select-bordered w-full my-1"
+            value={trip.transport.typeOfTransport}
+            onChange={e => handleChange(['transport', 'typeOfTransport'], e.target.value)}
+          >
+            <option value="">Select Transport Type</option>
+            <option value="airplane">Airplane</option>
+            <option value="car">Car</option>
+            <option value="train">Train</option>
+            <option value="bus">Bus</option>
+            <option value="other">Other</option>
+          </select>
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Start point"
+            value={trip.transport.startPoint}
+            onChange={e => handleChange(['transport', 'startPoint'], e.target.value)}
+          />
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="End Point"
+            value={trip.transport.endPoint}
+            onChange={e => handleChange(['transport', 'endPoint'], e.target.value)}
+          />
+          <input
+            className="input input-bordered w-full my-1"
+            placeholder="Price of the transport"
+            value={trip.transport.price}
+            onChange={e => handleChange(['transport', 'price'], e.target.value)}
+          />
+
         </div>
         <div className="">
 
