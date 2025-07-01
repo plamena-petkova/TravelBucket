@@ -2,12 +2,16 @@
 
 import { editUserById } from '@/services/userService';
 import { useUserStore } from '@/stores/userStore';
-import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const ProfilePage = () => {
+
+    const router = useRouter();
+
     const user = useUserStore((state) => state.user);
     const setUser = useUserStore((state) => state.setUser);
+    const clearUser = useUserStore((state) => state.clearUser);
 
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [changedValues, setChangedValues] = useState({
@@ -43,14 +47,13 @@ const ProfilePage = () => {
 
         try {
             const updatedUser = await editUserById(user._id, changedValues);
-           const response = await signIn('credentials', {
-                redirect: false,
-                email: changedValues.email,
-                password: user.password, 
-            });
-            console.log('Response', response);
             setUser(updatedUser);
             setOpenModal(false);
+            if (user.email !== changedValues.email) {
+                clearUser();
+                router.push('/auth')
+            }
+
         } catch (error) {
             console.error('Failed to update user:', error);
             alert('Something went wrong while saving.');
