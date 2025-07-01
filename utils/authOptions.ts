@@ -38,13 +38,12 @@ export const authOptions: NextAuthOptions = {
       try {
         await connectDB();
 
-        const userExists = await User.findOne({ email: user.email });
+        const userExists = await User.findOne({ id: user.id });
 
         if (!userExists) {
           await User.create({
             email: user.email,
             name: user.name,
-            image: user.image,
           });
         }
 

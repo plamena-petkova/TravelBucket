@@ -9,6 +9,8 @@ export async function GET() {
 
   const session = await getServerSession(authOptions);
 
+  console.log('session', session);
+
   if (!session?.user?.email) {
     return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
   }

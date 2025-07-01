@@ -1,4 +1,4 @@
-import { TripsState, UserProps, UserState } from "@/interfaces/interfaces";
+import { UserProps } from "@/interfaces/interfaces";
 import { create } from "zustand";
 
 type UserStore = {
@@ -16,4 +16,3 @@ export const useUserStore = create<UserStore>((set) => ({
   setUsers: (users) => set({ users }),
   clearUser: () => set({ user: null }),
 }));
-
