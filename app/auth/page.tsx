@@ -38,7 +38,6 @@ export default function Register() {
         }));
     }
 
-    console.log('RegisterValues', registerValues)
 
     const handleRegisterSubmit = async () => {
         try {

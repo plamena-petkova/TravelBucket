@@ -49,10 +49,6 @@ const ProfilePage = () => {
             const updatedUser = await editUserById(user._id, changedValues);
             setUser(updatedUser);
             setOpenModal(false);
-            if (user.email !== changedValues.email) {
-                clearUser();
-                router.push('/auth')
-            }
 
         } catch (error) {
             console.error('Failed to update user:', error);
